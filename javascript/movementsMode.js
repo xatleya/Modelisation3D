@@ -1,11 +1,48 @@
+var crcube;
+var crcyl;
+var delmash;
+var changeX;
+var changeY;
+var changeZ;
+
 function start_movement_mode(){
 	attach_translation_to_mesh(selectedMesh);
 	document.addEventListener( 'mousedown', on_mouse_down_move, false );
+	create_movement_menu();
 }
 
 function stop_movement_mode(){
 	document.removeEventListener('mousedown', on_mouse_down_move, false);
 	objectControl.detach(selectedMesh);
+	delete_movement_menu();
+}
+
+function create_movement_menu(){
+	var menu = new movements_menu();
+	crcube = gui.add(menu,'cube');
+	crcyl = gui.add(menu,'cylinder');
+	delmesh = gui.add(menu, 'delete');
+	changeX = gui.add(menu, 'posX', -500, 500);
+	changeY = gui.add(menu, 'posY', -500, 500);
+	changeZ = gui.add(menu, 'posZ', -500, 500);
+	changeX.onChange(function(value){
+	x_position(value);
+	});
+	changeY.onChange(function(value){
+	y_position(value);
+	});
+	changeZ.onChange(function(value){
+	z_position(value);
+	});
+}
+
+function delete_movement_menu(){
+	gui.remove(crcube);
+	gui.remove(crcyl);
+	gui.remove(delmesh);
+	gui.remove(changeX);
+	gui.remove(changeY);
+	gui.remove(changeZ);
 }
 
 function on_mouse_down_move( event ) {
@@ -22,7 +59,7 @@ function on_mouse_down_move( event ) {
 		while (selectedMesh != objects[i] && i < objects.length){
 			i++;
 		}
-		selectCube = i;
+		selectShape = i;
 		attach_translation_to_mesh(selectedMesh);
 	}
 }
@@ -37,7 +74,7 @@ function arrowChange(){
 	if (selectedMesh != null){
 		objectControl.detach(selectedMesh);
 	}
-	selectedMesh = objects[selectCube];
+	selectedMesh = objects[selectShape];
 	attach_translation_to_mesh(selectedMesh);
 }
 
@@ -49,7 +86,6 @@ function create_cube(){
 	
 	scene.add(mesh);
 	objects.push(mesh);
-	add_line(gui);
 	attach_translation_to_mesh(mesh);
 	var exporter = new THREE.STLExporter();
 }
@@ -71,40 +107,35 @@ function create_cylinder(){
 	console.log(exporter.parse( mesh ));
 }
 
-function decrease_shape(){
-	objects[selectCube].scale.x -= 1;
-	objects[selectCube].scale.y -= 1;
-	objects[selectCube].scale.z -= 1;
+function delete_mesh(){
+	if (selectShape >= 0 && selectShape < objects.length){
+		objectControl.detach(selectedMesh);
+		scene.remove (objects[selectShape]);
+		objects = supr(selectShape,objects);
+	}
 }
 
-function increase_shape(){
-	objects[selectCube].scale.x += 1;
-	objects[selectCube].scale.y += 1;
-	objects[selectCube].scale.z += 1;
+function supr(indice,tab){
+	var newtab = [];
+	for (var i = 0; i < indice; i++) {
+		newtab.push(tab[i]);
+	}
+	for (var i = indice +1; i < tab.length; i++) {
+		newtab.push(tab[i]);
+	}
+	return newtab;
 }
 
 function x_position(value){
-	objects[selectCube].position.setX(value);
+	objects[selectShape].position.setX(value);
 }
 
 function y_position(value){
-	objects[selectCube].position.setY(value);
+	objects[selectShape].position.setY(value);
 }
 
 function z_position(value){
-	objects[selectCube].position.setZ(value);
-}
-
-function length_shape(value){
-	objects[selectCube].scale.x = value;
-}
-
-function width_shape(value){
-	objects[selectCube].scale.y = value;
-}
-
-function heigth_shape(value){
-	objects[selectCube].scale.z = value;
+	objects[selectShape].position.setZ(value);
 }
 
 function init_cube_color(cube){
@@ -113,4 +144,19 @@ function init_cube_color(cube){
 			cube.faces[i].vertexColors[j] = new THREE.Color("#000000");
 		}
 	}
+}
+
+var movements_menu = function(){
+	this.posX = 0;
+	this.posY = 0;
+	this.posZ = 0;
+	this.cube = function (){
+		create_cube();
+	};
+	this.cylinder = function (){
+		create_cylinder();
+	};
+	this.delete = function (){
+		delete_mesh();
+	};
 }

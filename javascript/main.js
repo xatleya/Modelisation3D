@@ -5,10 +5,6 @@ var controls;
 var raycaster, mouse;
 var objectControl;
 var counter = 0;
-var gui = new dat.GUI();
-var d = gui.addFolder('Base');
-var o = gui.addFolder('Objects');
-var c = gui.addFolder('Cube Properties');
 var selectCube = 0;
 var stats;
 var mode = 77;
@@ -42,7 +38,7 @@ function init(){
 	raycaster = new THREE.Raycaster();
 	mouse = new THREE.Vector2();
 
-	create_menu();
+	create_main_menu();
 
 	document.addEventListener( 'keydown', mode_selection, false );
 	objectControl = new THREE.TransformControls( camera, renderer.domElement );

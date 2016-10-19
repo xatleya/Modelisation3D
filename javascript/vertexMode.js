@@ -1,5 +1,6 @@
 var vertexSpheres = [];
 var selectVertex = -1;
+var changeVertexColor;
 
 function start_vertex_mode(){
 	document.addEventListener( 'mousedown', on_mouse_down_vertex, false );
@@ -25,15 +26,29 @@ function start_vertex_mode(){
 	} else {
 		selectVertex = -1;
 	}
+	create_vertex_menu();
 }
 
 function stop_vertex_mode(){
 	document.removeEventListener('mousedown', on_mouse_down_vertex, false);
+	delete_vertex_menu();
 	for (var i = vertexSpheres.length - 1; i >= 0; i--) {
 		scene.remove (vertexSpheres[i]);
 	}
 	vertexSpheres = [];
 	selectVertex = -1;
+}
+
+function create_vertex_menu(){
+	var menu = new vertex_menu();
+	changeVertexColor = gui.addColor(menu, 'color');
+	changeVertexColor.onChange(function(value){
+		color_vertex(value);
+	});
+}
+
+function delete_vertex_menu(){
+	gui.remove(changeVertexColor);
 }
 
 function create_sphere_vertex(position){
@@ -107,4 +122,8 @@ function color_vertex(c){
 			objects[i].geometry.colorsNeedUpdate = true;
 		}
 	}
+}
+
+var vertex_menu = function() {
+	this.color = "#000000";
 }
