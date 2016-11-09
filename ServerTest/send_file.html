@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>WebSocket Echo Client</title>
+  <meta charset="UTF-8" />
+  <script src="nodejs/node_modules/socket.io-client/socket.io.js"></script>
+  <script>
+		window.addEventListener("load", Ready); 
+ 
+		function Ready(){ 
+			if(window.File && window.FileReader){ 
+				document.getElementById('UploadButton').addEventListener('click', StartUpload);  
+				document.getElementById('FileBox').addEventListener('change', FileChosen);
+			}
+			else
+			{
+				document.getElementById('UploadArea').innerHTML = "Your Browser Doesn't Support The File API Please Update Your Browser";
+			}
+		}
+		
+		var SelectedFile;
+		function FileChosen(evnt) {
+			SelectedFile = evnt.target.files[0];
+			document.getElementById('NameBox').value = SelectedFile.name;
+		}
+		
+		var socket = io.connect('http://localhost:8080');
+		var FReader;
+		var Name;
+		function StartUpload(){
+			if(document.getElementById('FileBox').value != "")
+			{
+				FReader = new FileReader();
+				Name = document.getElementById('NameBox').value;
+				FReader.onload = function(evnt){
+					socket.emit('Upload', { 'Name' : Name, Data : evnt.target.result });
+				}
+				socket.emit('Start', { 'Name' : Name, 'Size' : SelectedFile.size });
+			}
+			else
+			{
+				alert("Please Select A File");
+			}
+		}
+		
+		socket.on('MoreData', function (data){
+			var Place = data['Place'] * 524288;
+			var NewFile; //The Variable that will hold the new Block of Data
+			if(SelectedFile.webkitSlice) 
+				NewFile = SelectedFile.webkitSlice(Place, Place + Math.min(524288, (SelectedFile.size-Place)));
+			else
+				NewFile = SelectedFile.slice(Place, Place + Math.min(524288, (SelectedFile.size-Place)));
+			FReader.readAsBinaryString(NewFile);
+		});
+  </script>
+</head>
+<body> 
+  <div id="SendFile">
+        <h2>File Uploader</h2>
+        <span id='UploadArea'>
+            <label for="FileBox">Choose A File: </label><input type="file" id="FileBox"><br>
+            <label for="NameBox">Name: </label><input type="text" id="NameBox">
+            <button  type='button' id='UploadButton' class='Button'>Send</button>
+        </span>
+    </div>
+</body>
+</html>
