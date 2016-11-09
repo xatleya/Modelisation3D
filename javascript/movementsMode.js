@@ -1,3 +1,4 @@
+//variables utilisees pour le menu du mode mouvement
 var crcube;
 var crcyl;
 var delmash;
@@ -5,18 +6,21 @@ var changeX;
 var changeY;
 var changeZ;
 
+//initialisation du mode mouvement
 function start_movement_mode(){
 	attach_translation_to_mesh(selectedMesh);
 	document.addEventListener( 'mousedown', on_mouse_down_move, false );
 	create_movement_menu();
 }
 
+//fonction executee en quittant le mode mouvement
 function stop_movement_mode(){
 	document.removeEventListener('mousedown', on_mouse_down_move, false);
 	objectControl.detach(selectedMesh);
 	delete_movement_menu();
 }
 
+//creation du menu specifique au mode mouvement
 function create_movement_menu(){
 	var menu = new movements_menu();
 	crcube = gui.add(menu,'cube');
@@ -36,6 +40,7 @@ function create_movement_menu(){
 	});
 }
 
+//supression du menu specifique au mode mouvement
 function delete_movement_menu(){
 	gui.remove(crcube);
 	gui.remove(crcyl);
@@ -45,6 +50,7 @@ function delete_movement_menu(){
 	gui.remove(changeZ);
 }
 
+//fonction executee au clic de souris dans le mode mouvement
 function on_mouse_down_move( event ) {
 	mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
@@ -64,12 +70,17 @@ function on_mouse_down_move( event ) {
 	}
 }
 
+//affiche un repere de fleches sur l'objet selectionnee
+//les fleches permettent de deplacer l'objet
 function attach_translation_to_mesh(current_mesh){
 	objectControl.addEventListener( 'change', render );
 	objectControl.attach(current_mesh);
 	scene.add(objectControl);
 }
 
+//affiche un repere de fleches sur l'objet selectionnee 
+//apres l'avoir supprime sur la forme precedemment selectionne
+//les fleches permettent de deplacer l'objet
 function arrowChange(){
 	if (selectedMesh != null){
 		objectControl.detach(selectedMesh);
@@ -78,18 +89,20 @@ function arrowChange(){
 	attach_translation_to_mesh(selectedMesh);
 }
 
+//cree un cube
 function create_cube(){
 	var cube = new THREE.BoxGeometry(100, 100, 100);
 	init_cube_color(cube);
 	var boxMaterials = new THREE.MeshBasicMaterial({ vertexColors:THREE.VertexColors });
 	var mesh = new THREE.Mesh(cube, boxMaterials);
-	
+
 	scene.add(mesh);
 	objects.push(mesh);
 	attach_translation_to_mesh(mesh);
 	var exporter = new THREE.STLExporter();
 }
 
+//cree un cylindre
 function create_cylinder(){
 	var cylinder = new THREE.CylinderGeometry(30, 30, 100, 32);
 	var boxMaterials = [
@@ -107,6 +120,7 @@ function create_cylinder(){
 	console.log(exporter.parse( mesh ));
 }
 
+//supprime un objet
 function delete_mesh(){
 	if (selectShape >= 0 && selectShape < objects.length){
 		objectControl.detach(selectedMesh);
@@ -115,6 +129,7 @@ function delete_mesh(){
 	}
 }
 
+//supprime l'objet à l'indice "indice" dans le tableau "tab"
 function supr(indice,tab){
 	var newtab = [];
 	for (var i = 0; i < indice; i++) {
@@ -126,26 +141,32 @@ function supr(indice,tab){
 	return newtab;
 }
 
+//positionne l'objet selectionne a "value" sur l'axe x
 function x_position(value){
 	objects[selectShape].position.setX(value);
 }
 
+//positionne l'objet selectionne a "value" sur l'axe y
 function y_position(value){
 	objects[selectShape].position.setY(value);
 }
 
+//positionne l'objet selectionne a "value" sur l'axe z
 function z_position(value){
 	objects[selectShape].position.setZ(value);
 }
 
+//la couleur du cube est fixee en gris
 function init_cube_color(cube){
 	for (var i = 0; i < 12; i++) {
 		for (var j = 0; j < 3; j++) {
-			cube.faces[i].vertexColors[j] = new THREE.Color("#000000");
+			cube.faces[i].vertexColors[j] = new THREE.Color("#3e3e3e");
 		}
 	}
 }
 
+//variable utilisee pour la creation du menu specifique au mode mouvemebt
+//associe les boutons de creation de cube, de creation de cylindre, et de supression d'objet au fonctions associees
 var movements_menu = function(){
 	this.posX = 0;
 	this.posY = 0;

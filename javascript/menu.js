@@ -1,5 +1,7 @@
-var gui = new dat.GUI();
+var gui = new dat.GUI(); 		//variable menu
 
+//variable utilisee pour la creation du menu principal
+//association des 3 boutons de position de camera aux fonctions associees
 var main_menu = function() {
 	this.front_view = function(){
 		cam_front_view();
@@ -12,6 +14,7 @@ var main_menu = function() {
 	}
 };
 
+//creation du menu de base avec trois boutons pour la position de la camera
 function create_main_menu() {
 	var m = new main_menu(0);
 	gui.add(m,'front_view');

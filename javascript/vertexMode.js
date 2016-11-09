@@ -1,7 +1,10 @@
-var vertexSpheres = [];
-var selectVertex = -1;
-var changeVertexColor;
+var vertexSpheres = [];			//tableau contenant une sphere par sommet d'objet
+var selectVertex = -1;			//indice de la sphere selectionnee dans le tableau "vertexSpheres"
+var changeVertexColor;			//variable utilisee pour le menu du mode contrainte
 
+//initialisation du mode contrainte
+//une sphere est creee a chaque sommet d'objet
+//on selectionne un sommet en cliquant sur la sphere correspondante
 function start_vertex_mode(){
 	document.addEventListener( 'mousedown', on_mouse_down_vertex, false );
 	var allVertices = [];
@@ -29,6 +32,7 @@ function start_vertex_mode(){
 	create_vertex_menu();
 }
 
+//fonction executee en quittant le mode contrainte
 function stop_vertex_mode(){
 	document.removeEventListener('mousedown', on_mouse_down_vertex, false);
 	delete_vertex_menu();
@@ -39,6 +43,7 @@ function stop_vertex_mode(){
 	selectVertex = -1;
 }
 
+//creation du menu specifique au mode contrainte
 function create_vertex_menu(){
 	var menu = new vertex_menu();
 	changeVertexColor = gui.addColor(menu, 'color');
@@ -47,6 +52,7 @@ function create_vertex_menu(){
 	});
 }
 
+//supression du menu specifique au mode contrainte
 function delete_vertex_menu(){
 	gui.remove(changeVertexColor);
 }
@@ -62,6 +68,7 @@ function create_sphere_vertex(position){
 	vertexSpheres.push(mesh);
 }
 
+//fonction executee au clic de souris dans le mode contrainte
 function on_mouse_down_vertex( event ) {
 	mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
@@ -77,14 +84,18 @@ function on_mouse_down_vertex( event ) {
 	}
 }
 
+//colore en noir la sphere situe a "index" dans le tableau "vertexSpheres"
 function black_sphere(index){
 	vertexSpheres[index].material.color = new THREE.Color(0x000000);
 }
 
+//colore en rouge la sphere situe a "index" dans le tableau "vertexSpheres"
 function red_sphere(index){
 	vertexSpheres[index].material.color = new THREE.Color(0xff0000);
 }
 
+//colore en couleur "c" le sommet correspondant a la sphere selectionnee
+//Fonctionne sur un cube, a travailler sur les autres formes
 function color_vertex(c){
 	if (selectVertex != -1){
 		var s = -1;
@@ -124,6 +135,7 @@ function color_vertex(c){
 	}
 }
 
+//variable utilisee pour la creation du menu specifique au mode contrainte
 var vertex_menu = function() {
 	this.color = "#000000";
 }
