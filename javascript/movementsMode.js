@@ -6,6 +6,8 @@ var changeX;
 var changeY;
 var changeZ;
 
+var edgesTab = [];
+
 //initialisation du mode mouvement
 function start_movement_mode(){
 	attach_translation_to_mesh(selectedMesh);
@@ -74,6 +76,7 @@ function on_mouse_down_move( event ) {
 //les fleches permettent de deplacer l'objet
 function attach_translation_to_mesh(current_mesh){
 	objectControl.addEventListener( 'change', render );
+	objectControl.addEventListener( 'change', move_edges );
 	objectControl.attach(current_mesh);
 	scene.add(objectControl);
 }
@@ -89,15 +92,37 @@ function arrowChange(){
 	attach_translation_to_mesh(selectedMesh);
 }
 
+
+function move_edges(){
+	edgesTab[selectShape].position.setX(objects[selectShape].position.x);
+	edgesTab[selectShape].position.setY(objects[selectShape].position.y);
+	edgesTab[selectShape].position.setZ(objects[selectShape].position.z);
+}
+
+
+function create_edges(mesh){
+	mesh.material.polygonOffset = true
+	mesh.material.polygonOffsetFactor = 1
+	mesh.material.polygonOffsetUnits = 1
+	var geometry = new THREE.EdgesGeometry( mesh.geometry );
+	var material = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 4 } );
+	var edges = new THREE.Line( geometry, material, THREE.LineSegments );
+	scene.add(edges);
+	edgesTab.push(edges);
+}
+
+
 //cree un cube
 function create_cube(){
 	var cube = new THREE.BoxGeometry(100, 100, 100);
 	init_cube_color(cube);
 	var boxMaterials = new THREE.MeshBasicMaterial({ vertexColors:THREE.VertexColors });
 	var mesh = new THREE.Mesh(cube, boxMaterials);
-
+	create_edges(mesh);
 	scene.add(mesh);
 	objects.push(mesh);
+	selectedMesh = mesh;
+	selectShape = objects.length -1;
 	attach_translation_to_mesh(mesh);
 	var exporter = new THREE.STLExporter();
 }
@@ -112,20 +137,25 @@ function create_cylinder(){
 	];
 	var material = new THREE.MeshFaceMaterial(boxMaterials);
 	var mesh = new THREE.Mesh(cylinder, material);
+	create_edges(mesh);
 	scene.add(mesh);
 	objects.push(mesh);
+	selectedMesh = mesh;
+	selectShape = objects.length -1;
 	attach_translation_to_mesh(mesh);
-	
+	selectedMesh = mesh;
+	selectShape = objects.length -1;
 	var exporter = new THREE.STLExporter();
-	console.log(exporter.parse( mesh ));
 }
 
 //supprime un objet
 function delete_mesh(){
 	if (selectShape >= 0 && selectShape < objects.length){
 		objectControl.detach(selectedMesh);
-		scene.remove (objects[selectShape]);
+		scene.remove(objects[selectShape]);
+		scene.remove(edgesTab[selectShape]);
 		objects = supr(selectShape,objects);
+		edgesTab = supr(selectShape,edgesTab);
 	}
 }
 
