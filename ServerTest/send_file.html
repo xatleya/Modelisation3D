@@ -8,7 +8,7 @@
 		window.addEventListener("load", Ready); 
  
 		function Ready(){ 
-			if(window.File && window.FileReader){ 
+			if(window.File && window.FileReader){ 	//check if the files API are supported
 				document.getElementById('UploadButton').addEventListener('click', StartUpload);  
 				document.getElementById('FileBox').addEventListener('change', FileChosen);
 			}
@@ -20,20 +20,20 @@
 		
 		var SelectedFile;
 		function FileChosen(evnt) {
-			SelectedFile = evnt.target.files[0];
-			document.getElementById('NameBox').value = SelectedFile.name;
+			SelectedFile = evnt.target.files[0];	//get the file chosen
+			document.getElementById('NameBox').value = SelectedFile.name;	//print his name
 		}
 		
-		var socket = io.connect('http://localhost:8080');
+		var socket = io.connect('http://localhost:8080');	//connect to the server
 		var FReader;
 		var Name;
 		function StartUpload(){
-			if(document.getElementById('FileBox').value != "")
+			if(document.getElementById('FileBox').value != "")	//if you selected a file
 			{
-				FReader = new FileReader();
+				FReader = new FileReader();		//to chunk a file 
 				Name = document.getElementById('NameBox').value;
-				FReader.onload = function(evnt){
-					socket.emit('Upload', { 'Name' : Name, Data : evnt.target.result });
+				FReader.onload = function(evnt){	//to capture the file informations
+					socket.emit('Upload', { 'Name' : Name, Data : evnt.target.result });	//send data with label "Upload"
 				}
 				socket.emit('Start', { 'Name' : Name, 'Size' : SelectedFile.size });
 			}

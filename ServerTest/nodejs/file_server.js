@@ -29,20 +29,20 @@ io.sockets.on('connection', function (socket) {
         }
         var Place = 0;
         try{
-            var Stat = fs.statSync('Temp/' +  Name);
-            if(Stat.isFile())
+            var Stat = fs.statSync('Temp/' +  Name);	//check if a file exists
+            if(Stat.isFile())	//if the file exists
             {
-                Files[Name]['Downloaded'] = Stat.size;
+                Files[Name]['Downloaded'] = Stat.size;	//set downloaded size
                 Place = Stat.size / 524288;
             }
         }
-        catch(er){} //It's a New File
-        fs.open("Temp/" + Name, "a", 0755, function(err, fd){
-            if(err)
+        catch(er){} //It's a New File, we do nothing !
+        fs.open("Temp/" + Name, "a", 0755, function(err, fd){	//open file to append (path / flag / mode (permissions and sticky bits) / callback), create if don't exists
+            if(err)	//if error
             {
-                console.log(err);
+                console.log(err);	//print error
             }
-            else
+            else	//if it works
             {
                 Files[Name]['Handler'] = fd; //We store the file handler so we can write to it later
                 socket.emit('MoreData', { 'Place' : Place, Percent : 0 });
@@ -56,25 +56,11 @@ io.sockets.on('connection', function (socket) {
         Files[Name]['Data'] += data['Data'];
         if(Files[Name]['Downloaded'] == Files[Name]['FileSize']) //If File is Fully Uploaded
         {
-            fs.write(Files[Name]['Handler'], Files[Name]['Data'], null, 'Binary', function(err, Writen){
+            fs.write(Files[Name]['Handler'], Files[Name]['Data'], null, 'Binary', function(err, Writen){	//write data in handler
                 
             });
         }
-        /*else if(Files[Name]['Data'].length > 10485760){ //If the Data Buffer reaches 10MB
-            fs.write(Files[Name]['Handler'], Files[Name]['Data'], null, 'Binary', function(err, Writen){
-                Files[Name]['Data'] = ""; //Reset The Buffer
-                var Place = Files[Name]['Downloaded'] / 524288;
-                var Percent = (Files[Name]['Downloaded'] / Files[Name]['FileSize']) * 100;
-                socket.emit('MoreData', { 'Place' : Place, 'Percent' :  Percent});
-            });
-        }
-        else
-        {
-            var Place = Files[Name]['Downloaded'] / 524288;
-            var Percent = (Files[Name]['Downloaded'] / Files[Name]['FileSize']) * 100;
-            socket.emit('MoreData', { 'Place' : Place, 'Percent' :  Percent});
-        }*/
-		
+		//copy file inp in out and delete inp
 		var inp = fs.createReadStream("Temp/" + Name);
 		var out = fs.createWriteStream("Mesh/" + Name);
 		inp.pipe(out);
