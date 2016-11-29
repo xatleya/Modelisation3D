@@ -180,11 +180,13 @@ def check_if_line_not_exists(edges, current_edge):
     return True
 
 def faces_define(all_edges, vector, edges):
+    surface = []
     vector_count = same_vector_count(vector)
     count = 0
     edges_length = len(edges)
     number = edges[edges_length-1].number+1
     for i in vector_count:
+        surface.append(number+1)
         face = Face(number)
         face_line_number_tab = []
         for j in range(0, i):
@@ -232,6 +234,26 @@ def faces_define(all_edges, vector, edges):
                     break
         face.display()
         number += 2
+    filename = stl_to_geo_name(sys.argv[1])
+    str = "Surface Loop({}) = ".format(number)
+    str += "{"
+    for i in range (0,len(surface)-1):
+        str += "{}, ".format(surface[i])
+    str += "{}".format(surface[len(surface)-1])
+    str+= "};\n"
+    by = str.encode(encoding='UTF-8')
+    with open(filename, "ab") as f:
+        f.write(by)
+    #print(str)
+    str = "Volume({}) = ".format(number+1)
+    str += "{"
+    str += "{}".format(number)
+    str += "};\n"
+    by = str.encode(encoding='UTF-8')
+    with open(filename, "ab") as f:
+        f.write(by)
+    #print(str)
+
 
 def swap(tab, i1, i2):
     temp = tab[i1]

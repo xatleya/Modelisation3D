@@ -1,4 +1,5 @@
-lc = 40;Point(1) = {50, 50, 50, lc};
+lc = 40;
+Point(1) = {50, 50, 50, lc};
 Point(2) = {50, -50, 50, lc};
 Point(3) = {50, 50, -50, lc};
 Point(4) = {50, -50, -50, lc};
@@ -36,3 +37,5 @@ Line Loop(27) = {10, 13, 1, 15};
 Plane Surface(28) = {27};
 Line Loop(29) = {5, 12, 6, 16};
 Plane Surface(30) = {29};
+Surface Loop(31) = {20, 22, 24, 26, 28, 30};
+Volume(32) = {31};
