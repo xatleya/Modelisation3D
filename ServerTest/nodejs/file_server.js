@@ -1,25 +1,26 @@
 var Files = {};
 var app = require('http').createServer(handler)
-  , io = require('socket.io').listen(app)
-  , fs = require('fs')
-  , exec = require('child_process').exec
-  , util = require('util')
- 
+    , io = require('socket.io').listen(app)
+    , fs = require('fs')
+    , exec = require('child_process').exec
+    , util = require('util')
+
 app.listen(8080);
- 
+
 function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
-  function (err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('Error loading index.html');
-    }
-    res.writeHead(200);
-    res.end(data);
-  });
+    fs.readFile(__dirname + '/index.html',
+    function (err, data) {
+        if (err) {
+            res.writeHead(500);
+            return res.end('Error loading index.html');
+        }
+        res.writeHead(200);
+        res.end(data);
+    });
 }
- 
+
 io.sockets.on('connection', function (socket) {
+    //res.write(socket);
     socket.on('Start', function (data) { //data contains the variables that we passed through in the html file
         var Name = data['Name'];
         Files[Name] = {  //Create a new Entry in The Files Variable
@@ -48,7 +49,7 @@ io.sockets.on('connection', function (socket) {
                 socket.emit('MoreData', { 'Place' : Place, Percent : 0 });
             }
         });
-	});
+    });
 	
 	socket.on('Upload', function (data){
         var Name = data['Name'];
@@ -68,6 +69,6 @@ io.sockets.on('connection', function (socket) {
 			fs.unlink("Temp/" + Name, function () { //This Deletes The Temporary File
 				//Moving File Completed
 			});
-		});
+    	});
     });
 });
