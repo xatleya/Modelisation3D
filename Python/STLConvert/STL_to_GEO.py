@@ -1,3 +1,13 @@
+import sys
+import os
+
+def stl_to_geo_name(filename):
+    path, new_filename = os.path.split(filename)
+    new_filename = new_filename[0:-4]
+    new_filename += ".geo"
+    return new_filename
+
+
 class Point:
     def __init__(self, x, y, z):
         self.x = x
@@ -19,7 +29,12 @@ class Point:
             return False
 
     def display(self):
-        print("Point({}) = {{{}, {}, {}, lc}};".format(self.number, self.x, self.y, self.z))
+        filename = stl_to_geo_name(sys.argv[1])
+        string = "Point({}) = {{{}, {}, {}, lc}};\n".format(self.number, self.x, self.y, self.z)
+        by = string.encode(encoding='UTF-8')
+        with open(filename, "ab") as f:
+            f.write(by)
+        #print("Point({}) = {{{}, {}, {}, lc}};".format(self.number, self.x, self.y, self.z))
 
 class Line:
     def __init__(self, p1, p2):
@@ -36,7 +51,12 @@ class Line:
             return False
 
     def display(self):
-        print("Line({}) = {{{}, {}}};".format(self.number, self.p1, self.p2))
+        filename = stl_to_geo_name(sys.argv[1])
+        string = "Line({}) = {{{}, {}}};\n".format(self.number, self.p1, self.p2)
+        by = string.encode(encoding='UTF-8')
+        with open(filename, "ab") as f:
+            f.write(by)
+        #print("Line({}) = {{{}, {}}};".format(self.number, self.p1, self.p2))
 
 class Face:
     def __init__(self,  number):
@@ -48,11 +68,20 @@ class Face:
         for i in range(0, len(self.lines)-1):
             str += "{}, ".format(self.lines[i])
         str += "{}}};".format(self.lines[i+1])
-        str += "\nPlane Surface({}) = {{{}}};".format(self.number+1, self.number)
-        print(str)
+        str += "\nPlane Surface({}) = {{{}}};\n".format(self.number+1, self.number)
+        filename = stl_to_geo_name(sys.argv[1])
+        by = str.encode(encoding='UTF-8')
+        with open(filename, "ab") as f:
+            f.write(by)
+        #print(str)
 
 
 def get_vertices(source):
+    filename = stl_to_geo_name(sys.argv[1])
+    string = "lc = 40;\n"
+    by = string.encode(encoding='UTF-8')
+    with open(filename, "ab") as f:
+        f.write(by)
     all_vertices, vector = get_all_vertices(source, 1)
     vertices = []
     counter = 1
@@ -233,10 +262,11 @@ def same_vector_count(vector):
 
 
 if __name__ == '__main__':
-    source = open("exp.stl", "r")
+    filename = sys.argv[1]
+    source = open(filename, "r")
     vertices, vector = get_vertices(source)
-    source = open("exp.stl", "r")
+    source = open(filename, "r")
     edges = get_edges(source, vertices)
-    source = open("exp.stl", "r")
+    source = open(filename, "r")
     all_edges = get_all_edges(source, vertices)
     faces_define(all_edges, vector, edges)
