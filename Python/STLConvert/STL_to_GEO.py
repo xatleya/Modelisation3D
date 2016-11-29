@@ -21,6 +21,7 @@ class Point:
     def display(self):
         print("Point({}) = {{{}, {}, {}, lc}};".format(self.number, self.x, self.y, self.z))
 
+
 class Line:
     def __init__(self, p1, p2):
         self.p1 = p1
@@ -38,17 +39,18 @@ class Line:
     def display(self):
         print("Line({}) = {{{}, {}}};".format(self.number, self.p1, self.p2))
 
+
 class Face:
-    def __init__(self,  number):
+    def __init__(self, number):
         self.lines = []
         self.number = number
 
     def display(self):
         str = "Line Loop({}) = {{".format(self.number)
-        for i in range(0, len(self.lines)-1):
+        for i in range(0, len(self.lines) - 1):
             str += "{}, ".format(self.lines[i])
-        str += "{}}};".format(self.lines[i+1])
-        str += "\nPlane Surface({}) = {{{}}};".format(self.number+1, self.number)
+        str += "{}}};".format(self.lines[i + 1])
+        str += "\nPlane Surface({}) = {{{}}};".format(self.number + 1, self.number)
         print(str)
 
 
@@ -64,6 +66,7 @@ def get_vertices(source):
             vertices.append(vertex)
             vertex.display()
     return vertices, vector
+
 
 def get_all_vertices(source, vector_also):
     vertices = []
@@ -86,6 +89,7 @@ def get_all_vertices(source, vector_also):
     else:
         return vertices
 
+
 def point_not_already_exist(vertices, point):
     test = True
     for p in vertices:
@@ -107,6 +111,7 @@ def get_edges(source, vertices):
     for edge in edges:
         edge.display()
     return edges
+
 
 def get_all_edges(source, vertices):
     all_vertices = get_all_vertices(source, 0)
@@ -136,6 +141,7 @@ def search_a_class_number(tab, current):
         if elem == current:
             return elem.number
 
+
 def search_a_class_by_number(tab, number):
     for elem in tab:
         if elem.number == number:
@@ -150,11 +156,12 @@ def check_if_line_not_exists(edges, current_edge):
             return False
     return True
 
+
 def faces_define(all_edges, vector, edges):
     vector_count = same_vector_count(vector)
     count = 0
     edges_length = len(edges)
-    number = edges[edges_length-1].number+1
+    number = edges[edges_length - 1].number + 1
     for i in vector_count:
         face = Face(number)
         face_line_number_tab = []
@@ -162,7 +169,7 @@ def faces_define(all_edges, vector, edges):
             three_time = 0
             while three_time != 3:
                 edge_number = search_a_class_number(edges, all_edges[count])
-                if not(edge_number in face_line_number_tab):
+                if not (edge_number in face_line_number_tab):
                     face_line_number_tab.append(edge_number)
                 else:
                     face_line_number_tab.remove(edge_number)
@@ -204,6 +211,7 @@ def faces_define(all_edges, vector, edges):
         face.display()
         number += 2
 
+
 def swap(tab, i1, i2):
     temp = tab[i1]
     tab[i1] = tab[i2]
@@ -216,7 +224,7 @@ def same_vector_count(vector):
     result = []
     while True:
         v = vector[i]
-        for j in range(i+1, len(vector)):
+        for j in range(i + 1, len(vector)):
             if vector[j] == v:
                 counter += 1
             else:
@@ -224,8 +232,8 @@ def same_vector_count(vector):
                 counter = 1
                 i = j
                 break
-        if i == len(vector)-2:
-            if vector[i] == vector[i+1]:
+        if i == len(vector) - 2:
+            if vector[i] == vector[i + 1]:
                 counter += 1
             result.append(counter)
             break

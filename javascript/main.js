@@ -42,7 +42,7 @@ function init(){
 
 	create_main_menu();
 
-	document.addEventListener( 'keydown', mode_selection, false );
+	document.addEventListener( 'keyup', mode_selection, false );
 	objectControl = new THREE.TransformControls( camera, renderer.domElement );
 
 	start_movement_mode();

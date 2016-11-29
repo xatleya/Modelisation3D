@@ -1,5 +1,5 @@
 var vertexSpheres = [];			//tableau contenant une sphere par sommet d'objet
-var selectVertex = -1;			//indice de la sphere selectionnee dans le tableau "vertexSpheres"
+var selectVertex = [];			//indice de la sphere selectionnee dans le tableau "vertexSpheres"
 var changeVertexColor;			//variable utilisee pour le menu du mode contrainte
 
 //initialisation du mode contrainte
@@ -23,12 +23,6 @@ function start_vertex_mode(){
 	for (var i = allVertices.length - 1; i >= 0; i--) {
 		create_sphere_vertex(allVertices[i]);
 	}
-	if (allVertices.length != 0) {
-		selectVertex = 0;
-		red_sphere(selectVertex);
-	} else {
-		selectVertex = -1;
-	}
 	create_vertex_menu();
 }
 
@@ -40,7 +34,7 @@ function stop_vertex_mode(){
 		scene.remove (vertexSpheres[i]);
 	}
 	vertexSpheres = [];
-	selectVertex = -1;
+	selectVertex = [];
 }
 
 //creation du menu specifique au mode contrainte
@@ -76,31 +70,43 @@ function on_mouse_down_vertex( event ) {
 	var intersects = raycaster.intersectObjects( vertexSpheres );
 	if ( intersects.length > 0 ) {
 		var ind = indexOf(intersects[0].object,vertexSpheres);
-		if (ind != -1 && ind != selectVertex){
-			black_sphere(selectVertex);
-			selectVertex = ind;
-			red_sphere(selectVertex);
+		if(event.ctrlKey){
+			if (ind != -1 && selectVertex.indexOf(ind) < 0){
+				selectVertex.push(ind);
+				red_sphere([ind]);
+			}
+		}
+		else {
+			if (ind != -1){
+				black_sphere(selectVertex);
+				selectVertex = [ind];
+				red_sphere(selectVertex);
+			}
 		}
 	}
 }
 
 //colore en noir la sphere situe a "index" dans le tableau "vertexSpheres"
-function black_sphere(index){
-	vertexSpheres[index].material.color = new THREE.Color(0x000000);
+function black_sphere(indextab){
+	for (var index = indextab.length - 1; index >= 0; index--) {
+		vertexSpheres[indextab[index]].material.color = new THREE.Color(0x000000);
+	}
 }
 
 //colore en rouge la sphere situe a "index" dans le tableau "vertexSpheres"
-function red_sphere(index){
-	vertexSpheres[index].material.color = new THREE.Color(0xff0000);
+function red_sphere(indextab){
+	for (var index = indextab.length - 1; index >= 0; index--) {
+		vertexSpheres[indextab[index]].material.color = new THREE.Color(0xff0000);
+	}
 }
 
 //colore en couleur "c" le sommet correspondant a la sphere selectionnee
 //Fonctionne sur un cube, a travailler sur les autres formes
 function color_vertex(c){
-	if (selectVertex != -1){
+	for (var k = selectVertex.length - 1; k >= 0; k--) {
 		var s = -1;
 		var i = -1;
-		while (i < objects.length - 1 && s < selectVertex){
+		while (i < objects.length - 1 && s < selectVertex[k]){
 			i++;
 			s += objects[i].geometry.vertices.length;
 		}
@@ -113,7 +119,7 @@ function color_vertex(c){
 			vector.x = objects[i].geometry.vertices[s].x + position.x;
 			vector.y = objects[i].geometry.vertices[s].y + position.y;
 			vector.z = objects[i].geometry.vertices[s].z + position.z;
-			while (!vector_is_equal(vector , vertexSpheres[selectVertex].position)){
+			while (!vector_is_equal(vector , vertexSpheres[selectVertex[k]].position)){
 				s++;
 				vector.x = objects[i].geometry.vertices[s].x + position.x;
 				vector.y = objects[i].geometry.vertices[s].y + position.y;
