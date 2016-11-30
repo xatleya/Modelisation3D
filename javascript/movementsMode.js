@@ -7,6 +7,8 @@ var changeY;
 var changeZ;
 
 var edgesTab = [];
+var exporter = new THREE.STLExporter();
+var current_mesh;
 
 //initialisation du mode mouvement
 function start_movement_mode(){
@@ -124,7 +126,8 @@ function create_cube(){
 	selectedMesh = mesh;
 	selectShape = objects.length -1;
 	attach_translation_to_mesh(mesh);
-	var exporter = new THREE.STLExporter();
+	//current_mesh = exporter.parse(cube);
+	current_mesh = exporter.parse(mesh);
 }
 
 //cree un cylindre
@@ -145,7 +148,6 @@ function create_cylinder(){
 	attach_translation_to_mesh(mesh);
 	selectedMesh = mesh;
 	selectShape = objects.length -1;
-	var exporter = new THREE.STLExporter();
 }
 
 //supprime un objet

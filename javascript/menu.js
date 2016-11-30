@@ -12,6 +12,9 @@ var main_menu = function() {
 	this.top_view = function(){
 		cam_top_view();
 	}
+	this.export = function(){
+		exportation();
+	}
 };
 
 //creation du menu de base avec trois boutons pour la position de la camera
@@ -20,4 +23,5 @@ function create_main_menu() {
 	gui.add(m,'front_view');
 	gui.add(m,'side_view');
 	gui.add(m,'top_view');
+	gui.add(m, 'export');
 };

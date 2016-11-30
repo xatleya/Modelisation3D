@@ -1,3 +1,13 @@
+import sys
+import os
+
+def stl_to_geo_name(filename):
+    path, new_filename = os.path.split(filename)
+    new_filename = new_filename[0:-4]
+    new_filename += ".geo"
+    return new_filename
+
+
 class Point:
     def __init__(self, x, y, z):
         self.x = x
@@ -19,8 +29,12 @@ class Point:
             return False
 
     def display(self):
-        print("Point({}) = {{{}, {}, {}, lc}};".format(self.number, self.x, self.y, self.z))
-
+        filename = stl_to_geo_name(sys.argv[1])
+        string = "Point({}) = {{{}, {}, {}, lc}};\n".format(self.number, self.x, self.y, self.z)
+        by = string.encode(encoding='UTF-8')
+        with open(filename, "ab") as f:
+            f.write(by)
+        #print("Point({}) = {{{}, {}, {}, lc}};".format(self.number, self.x, self.y, self.z))
 
 class Line:
     def __init__(self, p1, p2):
@@ -37,24 +51,37 @@ class Line:
             return False
 
     def display(self):
-        print("Line({}) = {{{}, {}}};".format(self.number, self.p1, self.p2))
-
+        filename = stl_to_geo_name(sys.argv[1])
+        string = "Line({}) = {{{}, {}}};\n".format(self.number, self.p1, self.p2)
+        by = string.encode(encoding='UTF-8')
+        with open(filename, "ab") as f:
+            f.write(by)
+        #print("Line({}) = {{{}, {}}};".format(self.number, self.p1, self.p2))
 
 class Face:
-    def __init__(self, number):
+    def __init__(self,  number):
         self.lines = []
         self.number = number
 
     def display(self):
         str = "Line Loop({}) = {{".format(self.number)
-        for i in range(0, len(self.lines) - 1):
+        for i in range(0, len(self.lines)-1):
             str += "{}, ".format(self.lines[i])
-        str += "{}}};".format(self.lines[i + 1])
-        str += "\nPlane Surface({}) = {{{}}};".format(self.number + 1, self.number)
-        print(str)
+        str += "{}}};".format(self.lines[i+1])
+        str += "\nPlane Surface({}) = {{{}}};\n".format(self.number+1, self.number)
+        filename = stl_to_geo_name(sys.argv[1])
+        by = str.encode(encoding='UTF-8')
+        with open(filename, "ab") as f:
+            f.write(by)
+        #print(str)
 
 
 def get_vertices(source):
+    filename = stl_to_geo_name(sys.argv[1])
+    string = "lc = 40;\n"
+    by = string.encode(encoding='UTF-8')
+    with open(filename, "ab") as f:
+        f.write(by)
     all_vertices, vector = get_all_vertices(source, 1)
     vertices = []
     counter = 1
@@ -66,7 +93,6 @@ def get_vertices(source):
             vertices.append(vertex)
             vertex.display()
     return vertices, vector
-
 
 def get_all_vertices(source, vector_also):
     vertices = []
@@ -89,7 +115,6 @@ def get_all_vertices(source, vector_also):
     else:
         return vertices
 
-
 def point_not_already_exist(vertices, point):
     test = True
     for p in vertices:
@@ -111,7 +136,6 @@ def get_edges(source, vertices):
     for edge in edges:
         edge.display()
     return edges
-
 
 def get_all_edges(source, vertices):
     all_vertices = get_all_vertices(source, 0)
@@ -141,7 +165,6 @@ def search_a_class_number(tab, current):
         if elem == current:
             return elem.number
 
-
 def search_a_class_by_number(tab, number):
     for elem in tab:
         if elem.number == number:
@@ -156,20 +179,21 @@ def check_if_line_not_exists(edges, current_edge):
             return False
     return True
 
-
 def faces_define(all_edges, vector, edges):
+    surface = []
     vector_count = same_vector_count(vector)
     count = 0
     edges_length = len(edges)
-    number = edges[edges_length - 1].number + 1
+    number = edges[edges_length-1].number+1
     for i in vector_count:
+        surface.append(number+1)
         face = Face(number)
         face_line_number_tab = []
         for j in range(0, i):
             three_time = 0
             while three_time != 3:
                 edge_number = search_a_class_number(edges, all_edges[count])
-                if not (edge_number in face_line_number_tab):
+                if not(edge_number in face_line_number_tab):
                     face_line_number_tab.append(edge_number)
                 else:
                     face_line_number_tab.remove(edge_number)
@@ -210,6 +234,25 @@ def faces_define(all_edges, vector, edges):
                     break
         face.display()
         number += 2
+    filename = stl_to_geo_name(sys.argv[1])
+    str = "Surface Loop({}) = ".format(number)
+    str += "{"
+    for i in range (0,len(surface)-1):
+        str += "{}, ".format(surface[i])
+    str += "{}".format(surface[len(surface)-1])
+    str+= "};\n"
+    by = str.encode(encoding='UTF-8')
+    with open(filename, "ab") as f:
+        f.write(by)
+    #print(str)
+    str = "Volume({}) = ".format(number+1)
+    str += "{"
+    str += "{}".format(number)
+    str += "};\n"
+    by = str.encode(encoding='UTF-8')
+    with open(filename, "ab") as f:
+        f.write(by)
+    #print(str)
 
 
 def swap(tab, i1, i2):
@@ -224,7 +267,7 @@ def same_vector_count(vector):
     result = []
     while True:
         v = vector[i]
-        for j in range(i + 1, len(vector)):
+        for j in range(i+1, len(vector)):
             if vector[j] == v:
                 counter += 1
             else:
@@ -232,8 +275,8 @@ def same_vector_count(vector):
                 counter = 1
                 i = j
                 break
-        if i == len(vector) - 2:
-            if vector[i] == vector[i + 1]:
+        if i == len(vector)-2:
+            if vector[i] == vector[i+1]:
                 counter += 1
             result.append(counter)
             break
@@ -241,10 +284,11 @@ def same_vector_count(vector):
 
 
 if __name__ == '__main__':
-    source = open("exp.stl", "r")
+    filename = sys.argv[1]
+    source = open(filename, "r")
     vertices, vector = get_vertices(source)
-    source = open("exp.stl", "r")
+    source = open(filename, "r")
     edges = get_edges(source, vertices)
-    source = open("exp.stl", "r")
+    source = open(filename, "r")
     all_edges = get_all_edges(source, vertices)
     faces_define(all_edges, vector, edges)
