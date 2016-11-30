@@ -1,23 +1,41 @@
-var Files = {};
-var app = require('http').createServer(handler)
+var app = require('http').createServer(getFilename)
   , io = require('socket.io').listen(app)
   , fs = require('fs')
   , exec = require('child_process').exec
   , util = require('util')
+  , path = require('path')
+  ,	url = require('url');
  
-app.listen(8080);
- 
-function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
-  function (err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('Error loading index.html');
-    }
-    res.writeHead(200);
-    res.end(data);
-  });
+app.listen(1000);
+console.log("Server available...");
+
+function sendError(errCode, errString, response){
+  response.writeHead(errCode, {"Content-Type": "text/plain"});
+  response.write(errString + "\n");
+  response.end();
+  return;
 }
+
+function sendFile(err, file, response){
+  if(err) return sendError(500, err, response);
+  response.writeHead(200);
+  response.write(file, "binary");
+  response.end();
+}
+
+function getFile(exists, response, localpath){
+  if(!exists) return sendError(404, '404 Not Found', response);
+  fs.readFile(localpath, "binary",
+   function(err, file){ sendFile(err, file, response);});
+}
+
+function getFilename(request, response){
+  var urlpath = url.parse(request.url).pathname; // following domain or IP and port
+  var localpath = path.join(process.cwd(), urlpath); // if we are at root
+  fs.exists(localpath, function(result) { getFile(result, response, localpath)});
+}
+ 
+
  
 io.sockets.on('connection', function (socket) {
     socket.on('export', function (data) { 

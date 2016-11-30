@@ -126,8 +126,6 @@ function create_cube(){
 	selectedMesh = mesh;
 	selectShape = objects.length -1;
 	attach_translation_to_mesh(mesh);
-	//current_mesh = exporter.parse(cube);
-	current_mesh = exporter.parse(mesh);
 }
 
 //cree un cylindre
