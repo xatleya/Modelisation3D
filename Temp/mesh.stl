@@ -1,86 +1,86 @@
 solid exported
 	facet normal 1 0 0
 		outer loop
-			vertex -36.31476593017578 94.27147674560547 50
-			vertex -36.31476593017578 -5.728523254394531 50
-			vertex -36.31476593017578 94.27147674560547 -50
+			vertex 50 50 50
+			vertex 50 -50 50
+			vertex 50 50 -50
 		endloop
 	endfacet
 	facet normal 1 0 0
 		outer loop
-			vertex -36.31476593017578 -5.728523254394531 50
-			vertex -36.31476593017578 -5.728523254394531 -50
-			vertex -36.31476593017578 94.27147674560547 -50
+			vertex 50 -50 50
+			vertex 50 -50 -50
+			vertex 50 50 -50
 		endloop
 	endfacet
 	facet normal -1 0 0
 		outer loop
-			vertex -136.31476593017578 94.27147674560547 -50
-			vertex -136.31476593017578 -5.728523254394531 -50
-			vertex -136.31476593017578 94.27147674560547 50
+			vertex -50 50 -50
+			vertex -50 -50 -50
+			vertex -50 50 50
 		endloop
 	endfacet
 	facet normal -1 0 0
 		outer loop
-			vertex -136.31476593017578 -5.728523254394531 -50
-			vertex -136.31476593017578 -5.728523254394531 50
-			vertex -136.31476593017578 94.27147674560547 50
+			vertex -50 -50 -50
+			vertex -50 -50 50
+			vertex -50 50 50
 		endloop
 	endfacet
 	facet normal 0 1 0
 		outer loop
-			vertex -136.31476593017578 94.27147674560547 -50
-			vertex -136.31476593017578 94.27147674560547 50
-			vertex -36.31476593017578 94.27147674560547 -50
+			vertex -50 50 -50
+			vertex -50 50 50
+			vertex 50 50 -50
 		endloop
 	endfacet
 	facet normal 0 1 0
 		outer loop
-			vertex -136.31476593017578 94.27147674560547 50
-			vertex -36.31476593017578 94.27147674560547 50
-			vertex -36.31476593017578 94.27147674560547 -50
+			vertex -50 50 50
+			vertex 50 50 50
+			vertex 50 50 -50
 		endloop
 	endfacet
 	facet normal 0 -1 0
 		outer loop
-			vertex -136.31476593017578 -5.728523254394531 50
-			vertex -136.31476593017578 -5.728523254394531 -50
-			vertex -36.31476593017578 -5.728523254394531 50
+			vertex -50 -50 50
+			vertex -50 -50 -50
+			vertex 50 -50 50
 		endloop
 	endfacet
 	facet normal 0 -1 0
 		outer loop
-			vertex -136.31476593017578 -5.728523254394531 -50
-			vertex -36.31476593017578 -5.728523254394531 -50
-			vertex -36.31476593017578 -5.728523254394531 50
+			vertex -50 -50 -50
+			vertex 50 -50 -50
+			vertex 50 -50 50
 		endloop
 	endfacet
 	facet normal 0 0 1
 		outer loop
-			vertex -136.31476593017578 94.27147674560547 50
-			vertex -136.31476593017578 -5.728523254394531 50
-			vertex -36.31476593017578 94.27147674560547 50
+			vertex -50 50 50
+			vertex -50 -50 50
+			vertex 50 50 50
 		endloop
 	endfacet
 	facet normal 0 0 1
 		outer loop
-			vertex -136.31476593017578 -5.728523254394531 50
-			vertex -36.31476593017578 -5.728523254394531 50
-			vertex -36.31476593017578 94.27147674560547 50
+			vertex -50 -50 50
+			vertex 50 -50 50
+			vertex 50 50 50
 		endloop
 	endfacet
 	facet normal 0 0 -1
 		outer loop
-			vertex -36.31476593017578 94.27147674560547 -50
-			vertex -36.31476593017578 -5.728523254394531 -50
-			vertex -136.31476593017578 94.27147674560547 -50
+			vertex 50 50 -50
+			vertex 50 -50 -50
+			vertex -50 50 -50
 		endloop
 	endfacet
 	facet normal 0 0 -1
 		outer loop
-			vertex -36.31476593017578 -5.728523254394531 -50
-			vertex -136.31476593017578 -5.728523254394531 -50
-			vertex -136.31476593017578 94.27147674560547 -50
+			vertex 50 -50 -50
+			vertex -50 -50 -50
+			vertex -50 50 -50
 		endloop
 	endfacet
 endsolid exported
