@@ -1,6 +1,6 @@
 function exportation() {
 	var socket = io.connect('http://localhost:8080');
-	current_mesh = exporter.parse(selectedMesh);
+	var current_mesh = exporter.parse(selectedMesh);
 	socket.emit('export', {'file' : current_mesh});
 	socket.emit('conversion');
 	socket.on('load', function () {

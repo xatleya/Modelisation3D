@@ -1,11 +1,10 @@
 var renderer, camera, scene;	//variable necessaires au rendu 3D
 var objects = []; 				//liste d'objets créés
-var selectedMesh;				//objet selectionne
+var selectedMesh = null;				//objet selectionne
 var controls;
 var raycaster, mouse;			//variable permettant le controle a la souris (deplacement,selection)
 var objectControl;
 var counter = 0;
-var selectShape = 0;			//indice de l'objet selectionne dans le tableau "objects"
 var stats;
 var mode = 77;					//numero du mode dans lequel on se trouve
 								//correspond au code de la touche declenchant le mode
@@ -102,13 +101,6 @@ function stop_previous_mode(){
 	}
 }
 
-//
-function export_in_file(){
-	var exporter = new THREE.STLExporter();
-	console.log(exporter.parse( mesh ));
-	var blob = new Blob([exporter.parse(mesh)], {type: "text/plain;charset=utf-8"});
-	saveAs(blob, "data/export.stl");
-}
 
 //set la position de la camera en vue de face
 function cam_front_view(){

@@ -1,5 +1,3 @@
-/*var increaseSize;
-var decreaseSize;*/
 var increaseXsize;
 var increaseYsize;
 var increaseZsize;
@@ -27,8 +25,6 @@ function on_mouse_down_size(){
 //creation du menu specifique au mode taille
 function create_size_menu(){
 	var menu = new size_menu();
-	/*increaseSize = gui.add(menu, 'increase_size');
-	decreaseSize = gui.add(menu, 'decrease_size');*/
 	increaseXsize = gui.add(menu, 'increase_x_size');
 	increaseYsize = gui.add(menu, 'increase_y_size');
 	increaseZsize = gui.add(menu, 'increase_z_size');
@@ -39,8 +35,6 @@ function create_size_menu(){
 
 //supression du menu specifique au mode taille
 function delete_size_menu(){
-	/*gui.remove(increaseSize);
-	gui.remove(decreaseSize);*/
 	gui.remove(increaseXsize);
 	gui.remove(increaseYsize);
 	gui.remove(increaseZsize);
@@ -51,12 +45,6 @@ function delete_size_menu(){
 
 //variable utilisee pour la creation du menu specifique au mode taille
 var size_menu = function() {
-	/*this.increase_size = function(){
-		increase_shape();
-	}
-	this.decrease_size = function(){
-		decrease_shape();
-	}*/
 	this.increase_x_size = function(){
 		increase_x_shape();
 	}
@@ -78,156 +66,101 @@ var size_menu = function() {
 };
 
 function increase_x_shape(){
-	if (selectShape != -1){
-		for (var j = objects[selectShape].geometry.vertices.length - 1; j >= 0; j--){
-			if (objects[selectShape].geometry.vertices[j].x < 0){
-				objects[selectShape].geometry.vertices[j].x -= 1;
+	if (selectedMesh != null){
+		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
+			if (selectedMesh.mesh.geometry.vertices[j].x < 0){
+				selectedMesh.mesh.geometry.vertices[j].x -= 1;
 			}
-			else if (objects[selectShape].geometry.vertices[j].x > 0){
-				objects[selectShape].geometry.vertices[j].x += 1;
+			else if (selectedMesh.mesh.geometry.vertices[j].x > 0){
+				selectedMesh.mesh.geometry.vertices[j].x += 1;
 			}
 		}
-		objects[selectShape].geometry.verticesNeedUpdate = true;
+		selectedMesh.mesh.geometry.verticesNeedUpdate = true;
 		replace_edges();
 	}
 }
 
 function increase_y_shape(){
-	if (selectShape != -1){
-		for (var j = objects[selectShape].geometry.vertices.length - 1; j >= 0; j--){
-			if (objects[selectShape].geometry.vertices[j].y < 0){
-				objects[selectShape].geometry.vertices[j].y -= 1;
+	if (selectedMesh != null){
+		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
+			if (selectedMesh.mesh.geometry.vertices[j].y < 0){
+				selectedMesh.mesh.geometry.vertices[j].y -= 1;
 			}
-			else if (objects[selectShape].geometry.vertices[j].y > 0){
-				objects[selectShape].geometry.vertices[j].y += 1;
+			else if (selectedMesh.mesh.geometry.vertices[j].y > 0){
+				selectedMesh.mesh.geometry.vertices[j].y += 1;
 			}
 		}
-		objects[selectShape].geometry.verticesNeedUpdate = true;
+		selectedMesh.mesh.geometry.verticesNeedUpdate = true;
 		replace_edges();
 	}
 }
 
 function increase_z_shape(){
-	if (selectShape != -1){
-		for (var j = objects[selectShape].geometry.vertices.length - 1; j >= 0; j--){
-			if (objects[selectShape].geometry.vertices[j].z < 0){
-				objects[selectShape].geometry.vertices[j].z -= 1;
+	if (selectedMesh != null){
+		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
+			if (selectedMesh.mesh.geometry.vertices[j].z < 0){
+				selectedMesh.mesh.geometry.vertices[j].z -= 1;
 			}
-			else if (objects[selectShape].geometry.vertices[j].z > 0){
-				objects[selectShape].geometry.vertices[j].z += 1;
+			else if (selectedMesh.mesh.geometry.vertices[j].z > 0){
+				selectedMesh.mesh.geometry.vertices[j].z += 1;
 			}
 		}
-		objects[selectShape].geometry.verticesNeedUpdate = true;
+		selectedMesh.mesh.geometry.verticesNeedUpdate = true;
 		replace_edges();
 	}
 }
 
 function decrease_x_shape(){
-	if (selectShape != -1){
-		for (var j = objects[selectShape].geometry.vertices.length - 1; j >= 0; j--){
-			if (objects[selectShape].geometry.vertices[j].x < 0){
-				objects[selectShape].geometry.vertices[j].x += 1;
+	if (selectedMesh != null){
+		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
+			if (selectedMesh.mesh.geometry.vertices[j].x < 0){
+				selectedMesh.mesh.geometry.vertices[j].x += 1;
 			}
-			else if (objects[selectShape].geometry.vertices[j].x > 0){
-				objects[selectShape].geometry.vertices[j].x -= 1;
+			else if (selectedMesh.mesh.geometry.vertices[j].x > 0){
+				selectedMesh.mesh.geometry.vertices[j].x -= 1;
 			}
 		}
-		objects[selectShape].geometry.verticesNeedUpdate = true;
+		selectedMesh.mesh.geometry.verticesNeedUpdate = true;
 		replace_edges();
 	}
 }
 
 function decrease_y_shape(){
-	if (selectShape != -1){
-		for (var j = objects[selectShape].geometry.vertices.length - 1; j >= 0; j--){
-			if (objects[selectShape].geometry.vertices[j].y < 0){
-				objects[selectShape].geometry.vertices[j].y += 1;
+	if (selectedMesh != null){
+		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
+			if (selectedMesh.mesh.geometry.vertices[j].y < 0){
+				selectedMesh.mesh.geometry.vertices[j].y += 1;
 			}
-			else if (objects[selectShape].geometry.vertices[j].y > 0){
-				objects[selectShape].geometry.vertices[j].y -= 1;
+			else if (selectedMesh.mesh.geometry.vertices[j].y > 0){
+				selectedMesh.mesh.geometry.vertices[j].y -= 1;
 			}
 		}
-		objects[selectShape].geometry.verticesNeedUpdate = true;
+		selectedMesh.mesh.geometry.verticesNeedUpdate = true;
 		replace_edges();
 	}
 }
 
 function decrease_z_shape(){
-	if (selectShape != -1){
-		for (var j = objects[selectShape].geometry.vertices.length - 1; j >= 0; j--){
-			if (objects[selectShape].geometry.vertices[j].z < 0){
-				objects[selectShape].geometry.vertices[j].z += 1;
+	if (selectedMesh != null){
+		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
+			if (selectedMesh.mesh.geometry.vertices[j].z < 0){
+				selectedMesh.mesh.geometry.vertices[j].z += 1;
 			}
-			else if (objects[selectShape].geometry.vertices[j].z > 0){
-				objects[selectShape].geometry.vertices[j].z -= 1;
+			else if (selectedMesh.mesh.geometry.vertices[j].z > 0){
+				selectedMesh.mesh.geometry.vertices[j].z -= 1;
 			}
 		}
-		objects[selectShape].geometry.verticesNeedUpdate = true;
+		selectedMesh.mesh.geometry.verticesNeedUpdate = true;
 		replace_edges();
 	}
 }
 
 function replace_edges(){
-	mesh = objects[selectShape];
-	var geometry = new THREE.EdgesGeometry( mesh.geometry );
+	var geometry = new THREE.EdgesGeometry( selectedMesh.mesh.geometry );
 	var material = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 4 } );
 	var edges = new THREE.Line( geometry, material, THREE.LineSegments );
-	scene.remove(edgesTab[selectShape])
+	scene.remove(selectedMesh.edges)
+	selectedMesh.edges = edges;
 	scene.add(edges);
-	edgesTab[selectShape] = edges;
 	move_edges();
 }
-
-/*
-function increase_shape(){
-	if (selectShape != -1){
-		for (var j = objects[selectShape].geometry.vertices.length - 1; j >= 0; j--){
-			if (objects[selectShape].geometry.vertices[j].x < 0){
-				objects[selectShape].geometry.vertices[j].x -= 1;
-			}
-			else if (objects[selectShape].geometry.vertices[j].x > 0){
-				objects[selectShape].geometry.vertices[j].x += 1;
-			}
-			if (objects[selectShape].geometry.vertices[j].y < 0){
-				objects[selectShape].geometry.vertices[j].y -= 1;
-			}
-			else if (objects[selectShape].geometry.vertices[j].y > 0){
-				objects[selectShape].geometry.vertices[j].y += 1;
-			}
-			if (objects[selectShape].geometry.vertices[j].z < 0){
-				objects[selectShape].geometry.vertices[j].z -= 1;
-			}
-			else if (objects[selectShape].geometry.vertices[j].z > 0){
-				objects[selectShape].geometry.vertices[j].z += 1;
-			}
-		}
-		objects[selectShape].geometry.verticesNeedUpdate = true;
-	}
-}
-
-function decrease_shape(){
-	if (selectShape != -1){
-		for (var j = objects[selectShape].geometry.vertices.length - 1; j >= 0; j--){
-			if (objects[selectShape].geometry.vertices[j].x < 0){
-				objects[selectShape].geometry.vertices[j].x += 1;
-			}
-			else if (objects[selectShape].geometry.vertices[j].x > 0){
-				objects[selectShape].geometry.vertices[j].x -= 1;
-			}
-			if (objects[selectShape].geometry.vertices[j].y < 0){
-				objects[selectShape].geometry.vertices[j].y += 1;
-			}
-			else if (objects[selectShape].geometry.vertices[j].y > 0){
-				objects[selectShape].geometry.vertices[j].y -= 1;
-			}
-			if (objects[selectShape].geometry.vertices[j].z < 0){
-				objects[selectShape].geometry.vertices[j].z += 1;
-			}
-			else if (objects[selectShape].geometry.vertices[j].z > 0){
-				objects[selectShape].geometry.vertices[j].z -= 1;
-			}
-		}
-		objects[selectShape].geometry.verticesNeedUpdate = true;
-	}
-}
-*/
