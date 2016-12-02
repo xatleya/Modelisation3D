@@ -1,6 +1,9 @@
 var vertexSpheres = [];			//tableau contenant une sphere par sommet d'objet
 var selectVertex = [];			//indice de la sphere selectionnee dans le tableau "vertexSpheres"
 var changeVertexColor;			//variable utilisee pour le menu du mode contrainte
+var xshift;
+var yshift;
+var zshift;
 
 //initialisation du mode contrainte
 //une sphere est creee a chaque sommet d'objet
@@ -44,11 +47,17 @@ function create_vertex_menu(){
 	changeVertexColor.onChange(function(value){
 		color_vertex(value);
 	});
+	xshift = gui.add(menu, 'x_shifting');
+	yshift = gui.add(menu, 'y_shifting');
+	zshift = gui.add(menu, 'z_shifting');
 }
 
 //supression du menu specifique au mode contrainte
 function delete_vertex_menu(){
 	gui.remove(changeVertexColor);
+	gui.remove(xshift);
+	gui.remove(yshift);
+	gui.remove(zshift);
 }
 
 function create_sphere_vertex(position){
@@ -144,4 +153,7 @@ function color_vertex(c){
 //variable utilisee pour la creation du menu specifique au mode contrainte
 var vertex_menu = function() {
 	this.color = "#000000";
+	this.x_shifting = 0;
+	this.y_shifting = 0;
+	this.z_shifting = 0;
 }
