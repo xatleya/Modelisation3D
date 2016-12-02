@@ -108,35 +108,35 @@ function color_vertex(c){
 		var i = -1;
 		while (i < objects.length - 1 && s < selectVertex[k]){
 			i++;
-			s += objects[i].geometry.vertices.length;
+			s += objects[i].mesh.geometry.vertices.length;
 		}
 		if (i != -1) {
 			var vector;
 			var position;
 			s = 0;
-			position = objects[i].position;
+			position = objects[i].mesh.position;
 			vector = new THREE.Vector3;
-			vector.x = objects[i].geometry.vertices[s].x + position.x;
-			vector.y = objects[i].geometry.vertices[s].y + position.y;
-			vector.z = objects[i].geometry.vertices[s].z + position.z;
+			vector.x = objects[i].mesh.geometry.vertices[s].x + position.x;
+			vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
+			vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
 			while (!vector_is_equal(vector , vertexSpheres[selectVertex[k]].position)){
 				s++;
-				vector.x = objects[i].geometry.vertices[s].x + position.x;
-				vector.y = objects[i].geometry.vertices[s].y + position.y;
-				vector.z = objects[i].geometry.vertices[s].z + position.z;
+				vector.x = objects[i].mesh.geometry.vertices[s].x + position.x;
+				vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
+				vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
 			}
-			for (var j = objects[i].geometry.faces.length - 1; j >= 0; j--) {
-				if (objects[i].geometry.faces[j].a == s){
-					objects[i].geometry.faces[j].vertexColors[0].set(c);
+			for (var j = objects[i].mesh.geometry.faces.length - 1; j >= 0; j--) {
+				if (objects[i].mesh.geometry.faces[j].a == s){
+					objects[i].mesh.geometry.faces[j].vertexColors[0].set(c);
 				}
-				if (objects[i].geometry.faces[j].b == s){
-					objects[i].geometry.faces[j].vertexColors[1].set(c);
+				if (objects[i].mesh.geometry.faces[j].b == s){
+					objects[i].mesh.geometry.faces[j].vertexColors[1].set(c);
 				}
-				if (objects[i].geometry.faces[j].c == s){
-					objects[i].geometry.faces[j].vertexColors[2].set(c);
+				if (objects[i].mesh.geometry.faces[j].c == s){
+					objects[i].mesh.geometry.faces[j].vertexColors[2].set(c);
 				}
 			}
-			objects[i].geometry.colorsNeedUpdate = true;
+			objects[i].mesh.geometry.colorsNeedUpdate = true;
 		}
 	}
 }
