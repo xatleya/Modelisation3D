@@ -11,12 +11,12 @@ function start_vertex_mode(){
 	var vector;
 	var position;
 	for (var i = objects.length - 1; i >= 0; i--) {
-		position = objects[i].position;
-		for (var j = objects[i].geometry.vertices.length -1; j >= 0; j--) {
+		position = objects[i].mesh.position;
+		for (var j = objects[i].mesh.geometry.vertices.length -1; j >= 0; j--) {
 			vector = new THREE.Vector3;
-			vector.x = objects[i].geometry.vertices[j].x + position.x;
-			vector.y = objects[i].geometry.vertices[j].y + position.y;
-			vector.z = objects[i].geometry.vertices[j].z + position.z;
+			vector.x = objects[i].mesh.geometry.vertices[j].x + position.x;
+			vector.y = objects[i].mesh.geometry.vertices[j].y + position.y;
+			vector.z = objects[i].mesh.geometry.vertices[j].z + position.z;
 			allVertices.push(vector);
 		}
 	}
