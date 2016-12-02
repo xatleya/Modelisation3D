@@ -102,9 +102,11 @@ function arrowChange(){
 
 
 function move_edges(){
-	selectedMesh.edges.position.setX(selectedMesh.mesh.position.x);
-	selectedMesh.edges.position.setY(selectedMesh.mesh.position.y);
-	selectedMesh.edges.position.setZ(selectedMesh.mesh.position.z);
+	if(selectedMesh.edges != null){
+		selectedMesh.edges.position.setX(selectedMesh.mesh.position.x);
+		selectedMesh.edges.position.setY(selectedMesh.mesh.position.y);
+		selectedMesh.edges.position.setZ(selectedMesh.mesh.position.z);
+	}
 }
 
 
@@ -117,6 +119,7 @@ function create_cube(){
 	scene.add(mesh);
 	var m = Object.create(myMesh);
 	m.init(mesh);
+	m.create_edges();
 	objects.push(m);
 	selectedMesh = m;
 	attach_translation_to_mesh(m.mesh);
@@ -135,6 +138,7 @@ function create_cylinder(){
 	scene.add(mesh);
 	var m = Object.create(myMesh);
 	m.init(mesh);
+	m.create_edges();
 	objects.push(m);
 	selectedMesh = m;
 	attach_translation_to_mesh(m.mesh);
