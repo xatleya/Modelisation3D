@@ -1,9 +1,7 @@
-var increaseXsize;
-var increaseYsize;
-var increaseZsize;
-var decreaseXsize;
-var decreaseYsize;
-var decreaseZsize;
+var Size;
+var Xsize;
+var Ysize;
+var Zsize;
 
 //initialisation du mode taille
 function start_size_mode(){
@@ -25,54 +23,48 @@ function on_mouse_down_size(){
 //creation du menu specifique au mode taille
 function create_size_menu(){
 	var menu = new size_menu();
-	increaseXsize = gui.add(menu, 'increase_x_size');
-	increaseYsize = gui.add(menu, 'increase_y_size');
-	increaseZsize = gui.add(menu, 'increase_z_size');
-	decreaseXsize = gui.add(menu, 'decrease_x_size');
-	decreaseYsize = gui.add(menu, 'decrease_y_size');
-	decreaseZsize = gui.add(menu, 'decrease_z_size');
+	Size = gui.add(menu, 'size');
+	Xsize = gui.add(menu, 'x_size');
+	Ysize = gui.add(menu, 'y_size');
+	Zsize = gui.add(menu, 'z_size');
+	Size.onChange(function(value){
+	increase_shape(value);
+	});
+	Xsize.onChange(function(value){
+	increase_x_shape(value);
+	});
+	Ysize.onChange(function(value){
+	increase_y_shape(value);
+	});
+	Zsize.onChange(function(value){
+	increase_z_shape(value);
+	});
 }
 
 //supression du menu specifique au mode taille
 function delete_size_menu(){
-	gui.remove(increaseXsize);
-	gui.remove(increaseYsize);
-	gui.remove(increaseZsize);
-	gui.remove(decreaseXsize);
-	gui.remove(decreaseYsize);
-	gui.remove(decreaseZsize);
+	gui.remove(Size);
+	gui.remove(Xsize);
+	gui.remove(Ysize);
+	gui.remove(Zsize);
 }
 
 //variable utilisee pour la creation du menu specifique au mode taille
 var size_menu = function() {
-	this.increase_x_size = function(){
-		increase_x_shape();
-	}
-	this.increase_y_size = function(){
-		increase_y_shape();
-	}
-	this.increase_z_size = function(){
-		increase_z_shape();
-	}
-	this.decrease_x_size = function(){
-		decrease_x_shape();
-	}
-	this.decrease_y_size = function(){
-		decrease_y_shape();
-	}
-	this.decrease_z_size = function(){
-		decrease_z_shape();
-	}
+	this.size = 0;
+	this.x_size = 0;
+	this.y_size = 0;
+	this.z_size = 0;
 };
 
-function increase_x_shape(){
+function increase_x_shape(value){
 	if (selectedMesh != null){
 		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
 			if (selectedMesh.mesh.geometry.vertices[j].x < 0){
-				selectedMesh.mesh.geometry.vertices[j].x -= 1;
+				selectedMesh.mesh.geometry.vertices[j].x -= value;
 			}
 			else if (selectedMesh.mesh.geometry.vertices[j].x > 0){
-				selectedMesh.mesh.geometry.vertices[j].x += 1;
+				selectedMesh.mesh.geometry.vertices[j].x += value;
 			}
 		}
 		selectedMesh.mesh.geometry.verticesNeedUpdate = true;
@@ -80,14 +72,14 @@ function increase_x_shape(){
 	}
 }
 
-function increase_y_shape(){
+function increase_y_shape(value){
 	if (selectedMesh != null){
 		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
 			if (selectedMesh.mesh.geometry.vertices[j].y < 0){
-				selectedMesh.mesh.geometry.vertices[j].y -= 1;
+				selectedMesh.mesh.geometry.vertices[j].y -= value;
 			}
 			else if (selectedMesh.mesh.geometry.vertices[j].y > 0){
-				selectedMesh.mesh.geometry.vertices[j].y += 1;
+				selectedMesh.mesh.geometry.vertices[j].y += value;
 			}
 		}
 		selectedMesh.mesh.geometry.verticesNeedUpdate = true;
@@ -95,14 +87,14 @@ function increase_y_shape(){
 	}
 }
 
-function increase_z_shape(){
+function increase_z_shape(value){
 	if (selectedMesh != null){
 		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
 			if (selectedMesh.mesh.geometry.vertices[j].z < 0){
-				selectedMesh.mesh.geometry.vertices[j].z -= 1;
+				selectedMesh.mesh.geometry.vertices[j].z -= value;
 			}
 			else if (selectedMesh.mesh.geometry.vertices[j].z > 0){
-				selectedMesh.mesh.geometry.vertices[j].z += 1;
+				selectedMesh.mesh.geometry.vertices[j].z += value;
 			}
 		}
 		selectedMesh.mesh.geometry.verticesNeedUpdate = true;
@@ -110,48 +102,11 @@ function increase_z_shape(){
 	}
 }
 
-function decrease_x_shape(){
-	if (selectedMesh != null){
-		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
-			if (selectedMesh.mesh.geometry.vertices[j].x < 0){
-				selectedMesh.mesh.geometry.vertices[j].x += 1;
-			}
-			else if (selectedMesh.mesh.geometry.vertices[j].x > 0){
-				selectedMesh.mesh.geometry.vertices[j].x -= 1;
-			}
-		}
-		selectedMesh.mesh.geometry.verticesNeedUpdate = true;
-		replace_edges();
-	}
-}
-
-function decrease_y_shape(){
-	if (selectedMesh != null){
-		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
-			if (selectedMesh.mesh.geometry.vertices[j].y < 0){
-				selectedMesh.mesh.geometry.vertices[j].y += 1;
-			}
-			else if (selectedMesh.mesh.geometry.vertices[j].y > 0){
-				selectedMesh.mesh.geometry.vertices[j].y -= 1;
-			}
-		}
-		selectedMesh.mesh.geometry.verticesNeedUpdate = true;
-		replace_edges();
-	}
-}
-
-function decrease_z_shape(){
-	if (selectedMesh != null){
-		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
-			if (selectedMesh.mesh.geometry.vertices[j].z < 0){
-				selectedMesh.mesh.geometry.vertices[j].z += 1;
-			}
-			else if (selectedMesh.mesh.geometry.vertices[j].z > 0){
-				selectedMesh.mesh.geometry.vertices[j].z -= 1;
-			}
-		}
-		selectedMesh.mesh.geometry.verticesNeedUpdate = true;
-		replace_edges();
+function increase_shape(value){
+	if (selectShape != -1){
+		increase_x_shape(value);
+		increase_y_shape(value);
+		increase_z_shape(value);
 	}
 }
 
