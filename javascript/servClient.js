@@ -1,11 +1,11 @@
 function exportation() {
 	stop_previous_mode();
-	var socket = io.connect('http://localhost:8088');
+	var socket = io.connect('http://localhost:8087');
 	for (var i=0; i<objects.length; i++){
 		scene.remove(objects[i].mesh);
 		var current_mesh = exporter.parse(objects[i].mesh);
 		socket.emit('export', {'file' : current_mesh, 'file_name' : i + ".stl"});
-		socket.emit('constraint', selectedMesh.vertexConstraint);
+		socket.emit('constraint', {'arrayName' : "Array" + i, 'array' : objects[i].vertexConstraint});
 		socket.emit('conversion', {'name' : i});
 		socket.on('load', function (data) {
 			load_form(data['name']);
@@ -25,7 +25,4 @@ function load_form(name){
 		scene.add(objects[name].meshing);
 	});
 }
-
-
-
 

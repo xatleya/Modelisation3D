@@ -33,7 +33,7 @@ function getFilename(request, response){
 }
 
 var server = http.createServer(getFilename);
-server.listen(8088);  
+server.listen(8087);  
 console.log("Server available...");  
 var io = require('socket.io').listen(server);
 

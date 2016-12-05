@@ -19,8 +19,12 @@ var myMesh = {
 };
 
 var myVertex = {
-	init: function (index){
+	init: function (index,object){
+		console.log(object.mesh);
 		this.index = index;
+		this.coordx = object.mesh.geometry.vertices[index].x;
+		this.coordy = object.mesh.geometry.vertices[index].y;
+		this.coordz = object.mesh.geometry.vertices[index].z;
 		this.xshift = null;
 		this.yshift = null;
 		this.zshift = null;

@@ -184,7 +184,7 @@ function add_x_shift(value){
 			}
 			if (objects[i].vertexConstraint[s] === undefined){
 				var v = Object.create(myVertex);
-				v.init(s);
+				v.init(s,objects[i]);
 				objects[i].vertexConstraint[s] = v;
 			}
 			objects[i].vertexConstraint[s].xshift = value;
@@ -217,7 +217,7 @@ function add_y_shift(value){
 			}
 			if (objects[i].vertexConstraint[s] === undefined){
 				var v = Object.create(myVertex);
-				v.init(s);
+				v.init(s,objects[i]);
 				objects[i].vertexConstraint[s] = v;
 			}
 			objects[i].vertexConstraint[s].yshift = value;
@@ -250,7 +250,7 @@ function add_z_shift(value){
 			}
 			if (objects[i].vertexConstraint[s] === undefined){
 				var v = Object.create(myVertex);
-				v.init(s);
+				v.init(s,objects[i]);
 				objects[i].vertexConstraint[s] = v;
 			}
 			objects[i].vertexConstraint[s].zshift = value;
