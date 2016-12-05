@@ -33,7 +33,7 @@ function getFilename(request, response){
 }
 
 var server = http.createServer(getFilename);
-server.listen(8080);  
+server.listen(8088);  
 console.log("Server available...");  
 var io = require('socket.io').listen(server);
 
@@ -62,7 +62,11 @@ io.sockets.on('connection', function (socket) {
 			}
 		});
     });
-	
+		
+    socket.on('constraint', function (socket){
+    	console.log(socket);
+    });
+
 	socket.on('conversion', function (data){
 		var name = data['name'];
 		var cmd = 'py Python/STL_to_GEO.py Temp/' + name + '.stl';

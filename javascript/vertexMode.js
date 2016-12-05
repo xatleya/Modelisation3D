@@ -50,6 +50,15 @@ function create_vertex_menu(){
 	xshift = gui.add(menu, 'x_shifting');
 	yshift = gui.add(menu, 'y_shifting');
 	zshift = gui.add(menu, 'z_shifting');
+	xshift.onChange(function(value){
+	add_x_shift(value);
+	});
+	yshift.onChange(function(value){
+	add_y_shift(value);
+	});
+	zshift.onChange(function(value){
+	add_z_shift(value);
+	});
 }
 
 //supression du menu specifique au mode contrainte
@@ -150,6 +159,104 @@ function color_vertex(c){
 	}
 }
 
+function add_x_shift(value){
+	for (var k = selectVertex.length - 1; k >= 0; k--) {
+		var s = -1;
+		var i = -1;
+		while (i < objects.length - 1 && s < selectVertex[k]){
+			i++;
+			s += objects[i].mesh.geometry.vertices.length;
+		}
+		if (i != -1) {
+			var vector;
+			var position;
+			s = 0;
+			position = objects[i].mesh.position;
+			vector = new THREE.Vector3;
+			vector.x = objects[i].mesh.geometry.vertices[s].x + position.x;
+			vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
+			vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
+			while (!vector_is_equal(vector , vertexSpheres[selectVertex[k]].position)){
+				s++;
+				vector.x = objects[i].mesh.geometry.vertices[s].x + position.x;
+				vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
+				vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
+			}
+			if (objects[i].vertexConstraint[s] === undefined){
+				var v = Object.create(myVertex);
+				v.init(s);
+				objects[i].vertexConstraint[s] = v;
+			}
+			objects[i].vertexConstraint[s].xshift = value;
+		}
+	}
+}
+
+function add_y_shift(value){
+	for (var k = selectVertex.length - 1; k >= 0; k--) {
+		var s = -1;
+		var i = -1;
+		while (i < objects.length - 1 && s < selectVertex[k]){
+			i++;
+			s += objects[i].mesh.geometry.vertices.length;
+		}
+		if (i != -1) {
+			var vector;
+			var position;
+			s = 0;
+			position = objects[i].mesh.position;
+			vector = new THREE.Vector3;
+			vector.x = objects[i].mesh.geometry.vertices[s].x + position.x;
+			vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
+			vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
+			while (!vector_is_equal(vector , vertexSpheres[selectVertex[k]].position)){
+				s++;
+				vector.x = objects[i].mesh.geometry.vertices[s].x + position.x;
+				vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
+				vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
+			}
+			if (objects[i].vertexConstraint[s] === undefined){
+				var v = Object.create(myVertex);
+				v.init(s);
+				objects[i].vertexConstraint[s] = v;
+			}
+			objects[i].vertexConstraint[s].yshift = value;
+		}
+	}
+}
+
+function add_z_shift(value){
+	for (var k = selectVertex.length - 1; k >= 0; k--) {
+		var s = -1;
+		var i = -1;
+		while (i < objects.length - 1 && s < selectVertex[k]){
+			i++;
+			s += objects[i].mesh.geometry.vertices.length;
+		}
+		if (i != -1) {
+			var vector;
+			var position;
+			s = 0;
+			position = objects[i].mesh.position;
+			vector = new THREE.Vector3;
+			vector.x = objects[i].mesh.geometry.vertices[s].x + position.x;
+			vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
+			vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
+			while (!vector_is_equal(vector , vertexSpheres[selectVertex[k]].position)){
+				s++;
+				vector.x = objects[i].mesh.geometry.vertices[s].x + position.x;
+				vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
+				vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
+			}
+			if (objects[i].vertexConstraint[s] === undefined){
+				var v = Object.create(myVertex);
+				v.init(s);
+				objects[i].vertexConstraint[s] = v;
+			}
+			objects[i].vertexConstraint[s].zshift = value;
+		}
+	}
+}
 //variable utilisee pour la creation du menu specifique au mode contrainte
 var vertex_menu = function() {
 	this.color = "#000000";

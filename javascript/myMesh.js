@@ -3,6 +3,7 @@ var myMesh = {
 		this.mesh = mesh;
 		this.edges = this.create_edges();
 		this.meshing = null;
+		this.vertexConstraint = [];
 	},
 	
 	create_edges: function(){
@@ -14,5 +15,14 @@ var myMesh = {
 		var edges = new THREE.Line( geometry, material, THREE.LineSegments );
 		scene.add(edges);
 		return edges;
+	}
+};
+
+var myVertex = {
+	init: function (index){
+		this.index = index;
+		this.xshift = null;
+		this.yshift = null;
+		this.zshift = null;
 	}
 };
