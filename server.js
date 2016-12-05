@@ -41,7 +41,8 @@ io.sockets.on('connection', function (socket) {
     socket.on('export', function (data) { 
 		console.log(data['file']);
 		try{
-			var file_name = "mesh.stl"
+			//var file_name = "mesh.stl"
+			var file_name = data['file_name'];
 			var Stat = fs.statSync('Temp/' + file_name);	//check if a file exists
 			if(Stat.isFile()){	//if the file exists
 			
@@ -62,12 +63,13 @@ io.sockets.on('connection', function (socket) {
 		});
     });
 	
-	socket.on('conversion', function (){
-		var cmd = 'py Python/STL_to_GEO.py Temp/mesh.stl';
+	socket.on('conversion', function (data){
+		var name = data['name'];
+		var cmd = 'py Python/STL_to_GEO.py Temp/' + name + '.stl';
 		exec(cmd, function(error, stdout, stderr) {
-			var cmd = 'gmsh en mesh.geo -3 -format stl';
+			var cmd = 'gmsh en ' + name + '.geo -3 -format stl';
 			exec(cmd, function(error, stdout, stderr) {
-				socket.emit('load');
+				socket.emit('load', {'name' : name});
 			});
 		});
 	});
