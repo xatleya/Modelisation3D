@@ -20,7 +20,6 @@ var myMesh = {
 
 var myVertex = {
 	init: function (index,object){
-		console.log(object.mesh);
 		this.index = index;
 		this.coordx = object.mesh.geometry.vertices[index].x;
 		this.coordy = object.mesh.geometry.vertices[index].y;
