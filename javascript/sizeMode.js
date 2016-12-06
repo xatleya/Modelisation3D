@@ -1,8 +1,3 @@
-var Size;
-var Xsize;
-var Ysize;
-var Zsize;
-
 //initialisation du mode taille
 function start_size_mode(){
 	document.addEventListener( 'mousedown', on_mouse_down_size, false );

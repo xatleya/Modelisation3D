@@ -1,5 +1,7 @@
+var tab = [];
+
 function exportation() {
-	stop_previous_mode();
+	//stop_previous_mode();
 	var socket = io.connect('http://localhost:8080');
 	for (var i=0; i<objects.length; i++){
 		scene.remove(objects[i].mesh);
@@ -17,12 +19,27 @@ function load_form(name){
 	loader.load( name + '.stl', function ( geometry ) {
 		var material = new THREE.MeshPhongMaterial({ wireframe : true });
 		var mesh = new THREE.Mesh( geometry, material );
-		//scene.add( mesh );
 		objects[name].meshing = mesh;
 		scene.remove(objects[name].mesh);
 		scene.remove(objects[name].edges);
 		scene.add(objects[name].meshing);
+		tab.push(mesh);
 	});
+}
+
+function start_meshing_mode(){
+	exportation();
+}
+
+function stop_meshing_mode(){
+	for(var i=0; i<objects.length; i++){
+		scene.remove(objects[i].meshing)
+		scene.add(objects[i].mesh);
+		scene.add(objects[i].edges);
+	}
+	for(var i=0; i<tab.length; i++){
+		scene.remove(tab[i]);
+	}
 }
 
 

@@ -76,6 +76,11 @@ function mode_selection( event ) {
 			mode = 82;
 			start_rotate_mode();
 			break;
+		case 69: //e
+			stop_previous_mode();
+			mode = 69;
+			start_meshing_mode();
+			break;
 		default:
 			break;
 	}
@@ -95,6 +100,9 @@ function stop_previous_mode(){
 			break;
 		case 82:
 			stop_rotate_mode();
+			break;
+		case 69:
+			stop_meshing_mode();
 			break;
 		default:
 			break;
