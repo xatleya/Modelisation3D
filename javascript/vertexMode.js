@@ -1,5 +1,6 @@
 var vertexSpheres = [];			//tableau contenant une sphere par sommet d'objet
-var selectVertex = [];			//indice de la sphere selectionnee dans le tableau "vertexSpheres"
+var selectVertex = [];			//indices des spheres selectionnees dans le tableau "vertexSpheres"
+var selectFaces = []; 			//faces selectionnes
 var changeVertexColor;			//variable utilisee pour le menu du mode contrainte
 var xshift;
 var yshift;
@@ -97,21 +98,67 @@ function on_mouse_down_vertex( event ) {
 		else {
 			if (ind != -1){
 				black_sphere(selectVertex);
+				black_face(selectFaces);
 				selectVertex = [ind];
+				selectFaces = [];
 				red_sphere(selectVertex);
+			}
+		}
+	}
+	else {
+		intersects = raycaster.intersectObjects( objects.map(function(a) {return a.mesh;}) );
+		if ( intersects.length > 0 ) {
+			var i = 0;
+			while (i < intersects[0].object.geometry.faces.length && intersects[0].object.geometry.faces[i] != intersects[0].face){
+				i++;
+			}
+			if (i < intersects[0].object.geometry.faces.length){
+				if(event.ctrlKey){
+					selectFaces.push([intersects[0].object.geometry,i]);
+					red_face([[intersects[0].object.geometry,i]]);
+				}
+				else {
+					black_face(selectFaces);
+					black_sphere(selectVertex);
+					selectFaces = [[intersects[0].object.geometry,i]];
+					selectVertex = [];
+					red_face(selectFaces);
+				}
 			}
 		}
 	}
 }
 
-//colore en noir la sphere situe a "index" dans le tableau "vertexSpheres"
+//colore en noir les faces dans "facetab"
+function black_face(facetab){
+	var black = new THREE.Color(0x3e3e3e);
+	for (var index = facetab.length - 1; index >= 0; index--) {
+		facetab[index][0].faces[facetab[index][1]].vertexColors[0].set(black);
+		facetab[index][0].faces[facetab[index][1]].vertexColors[1].set(black);
+		facetab[index][0].faces[facetab[index][1]].vertexColors[2].set(black);
+		facetab[index][0].colorsNeedUpdate = true;
+	}
+}
+
+//colore en rouge les faces dans "facetab"
+function red_face(facetab){
+	var red = new THREE.Color(0xff0000);
+	for (var index = facetab.length - 1; index >= 0; index--) {
+		facetab[index][0].faces[facetab[index][1]].vertexColors[0].set(red);
+		facetab[index][0].faces[facetab[index][1]].vertexColors[1].set(red);
+		facetab[index][0].faces[facetab[index][1]].vertexColors[2].set(red);
+		facetab[index][0].colorsNeedUpdate = true;
+	}
+}
+
+//colore en noir les spheres dont l'index dans "vertexSpheres" est stocke dans indextab 
 function black_sphere(indextab){
 	for (var index = indextab.length - 1; index >= 0; index--) {
 		vertexSpheres[indextab[index]].material.color = new THREE.Color(0x000000);
 	}
 }
 
-//colore en rouge la sphere situe a "index" dans le tableau "vertexSpheres"
+//colore en rouge les spheres dont l'index dans "vertexSpheres" est stocke dans indextab 
 function red_sphere(indextab){
 	for (var index = indextab.length - 1; index >= 0; index--) {
 		vertexSpheres[indextab[index]].material.color = new THREE.Color(0xff0000);
@@ -157,9 +204,11 @@ function color_vertex(c){
 			objects[i].mesh.geometry.colorsNeedUpdate = true;
 		}
 	}
+	//console.log(objects);
 }
 
-function add_x_shift(value){
+function get_selected_vertices(){
+	tab = [];
 	for (var k = selectVertex.length - 1; k >= 0; k--) {
 		var s = -1;
 		var i = -1;
@@ -182,78 +231,98 @@ function add_x_shift(value){
 				vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
 				vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
 			}
-			if (objects[i].vertexConstraint[s] === undefined){
-				var v = Object.create(myVertex);
-				v.init(s,objects[i]);
-				objects[i].vertexConstraint[s] = v;
+			tab.push([i,s]);
+		}
+	}
+	return tab;
+}
+
+function get_myMesh(geometry){
+	i = 0;
+	while (i < objects.length && objects[i].mesh.geometry != geometry){
+		i++;
+	}
+	if (i < objects.length){
+		return i;
+	}else{
+		return -1;
+	}
+}
+
+function add_x_shift(value){
+	verticesTab = get_selected_vertices();
+	for (var j = verticesTab.length - 1; j >= 0; j--) {
+		i = verticesTab[j][0];
+		s = verticesTab[j][1];
+		if (objects[i].vertexConstraint[s] === undefined){
+			var v = Object.create(myVertex);
+			v.init(s,objects[i]);
+			objects[i].vertexConstraint[s] = v;
+		}
+		objects[i].vertexConstraint[s].xshift = value;
+	}
+	for (var j = selectFaces.length - 1; j >= 0; j--) {
+		index = get_myMesh(selectFaces[j][0]);
+		faceNumber = selectFaces[j][1];
+		if (index != -1) {
+			if (objects[index].faceConstraint[faceNumber] === undefined){
+				var f = Object.create(myFace);
+				f.init(faceNumber, objects[index]);
+				objects[index].faceConstraint[faceNumber] = f;
 			}
-			objects[i].vertexConstraint[s].xshift = value;
+			objects[index].faceConstraint[faceNumber].xshift = value;
 		}
 	}
 }
 
 function add_y_shift(value){
-	for (var k = selectVertex.length - 1; k >= 0; k--) {
-		var s = -1;
-		var i = -1;
-		while (i < objects.length - 1 && s < selectVertex[k]){
-			i++;
-			s += objects[i].mesh.geometry.vertices.length;
+	verticesTab = get_selected_vertices();
+	for (var j = verticesTab.length - 1; j >= 0; j--) {
+		i = verticesTab[j][0];
+		s = verticesTab[j][1];
+		if (objects[i].vertexConstraint[s] === undefined){
+			var v = Object.create(myVertex);
+			v.init(s,objects[i]);
+			objects[i].vertexConstraint[s] = v;
 		}
-		if (i != -1) {
-			var vector;
-			var position;
-			s = 0;
-			position = objects[i].mesh.position;
-			vector = new THREE.Vector3;
-			vector.x = objects[i].mesh.geometry.vertices[s].x + position.x;
-			vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
-			vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
-			while (!vector_is_equal(vector , vertexSpheres[selectVertex[k]].position)){
-				s++;
-				vector.x = objects[i].mesh.geometry.vertices[s].x + position.x;
-				vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
-				vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
+		objects[i].vertexConstraint[s].yshift = value;
+	}
+	for (var j = selectFaces.length - 1; j >= 0; j--) {
+		index = get_myMesh(selectFaces[j][0]);
+		faceNumber = selectFaces[j][1];
+		if (index != -1) {
+			if (objects[index].faceConstraint[faceNumber] === undefined){
+				var f = Object.create(myFace);
+				f.init(faceNumber, objects[index]);
+				objects[index].faceConstraint[faceNumber] = f;
 			}
-			if (objects[i].vertexConstraint[s] === undefined){
-				var v = Object.create(myVertex);
-				v.init(s,objects[i]);
-				objects[i].vertexConstraint[s] = v;
-			}
-			objects[i].vertexConstraint[s].yshift = value;
+			objects[index].faceConstraint[faceNumber].yshift = value;
 		}
 	}
 }
 
 function add_z_shift(value){
-	for (var k = selectVertex.length - 1; k >= 0; k--) {
-		var s = -1;
-		var i = -1;
-		while (i < objects.length - 1 && s < selectVertex[k]){
-			i++;
-			s += objects[i].mesh.geometry.vertices.length;
+	verticesTab = get_selected_vertices();
+	for (var j = verticesTab.length - 1; j >= 0; j--) {
+		i = verticesTab[j][0];
+		s = verticesTab[j][1];
+		if (objects[i].vertexConstraint[s] === undefined){
+			var v = Object.create(myVertex);
+			v.init(s,objects[i]);
+			objects[i].vertexConstraint[s] = v;
 		}
-		if (i != -1) {
-			var vector;
-			var position;
-			s = 0;
-			position = objects[i].mesh.position;
-			vector = new THREE.Vector3;
-			vector.x = objects[i].mesh.geometry.vertices[s].x + position.x;
-			vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
-			vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
-			while (!vector_is_equal(vector , vertexSpheres[selectVertex[k]].position)){
-				s++;
-				vector.x = objects[i].mesh.geometry.vertices[s].x + position.x;
-				vector.y = objects[i].mesh.geometry.vertices[s].y + position.y;
-				vector.z = objects[i].mesh.geometry.vertices[s].z + position.z;
+		objects[i].vertexConstraint[s].zshift = value;
+	}
+	for (var j = selectFaces.length - 1; j >= 0; j--) {
+		index = get_myMesh(selectFaces[j][0]);
+		faceNumber = selectFaces[j][1];
+		if (index != -1) {
+			if (objects[index].faceConstraint[faceNumber] === undefined){
+				var f = Object.create(myFace);
+				f.init(faceNumber, objects[index]);
+				objects[index].faceConstraint[faceNumber] = f;
 			}
-			if (objects[i].vertexConstraint[s] === undefined){
-				var v = Object.create(myVertex);
-				v.init(s,objects[i]);
-				objects[i].vertexConstraint[s] = v;
-			}
-			objects[i].vertexConstraint[s].zshift = value;
+			objects[index].faceConstraint[faceNumber].zshift = value;
 		}
 	}
 }

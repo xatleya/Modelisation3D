@@ -7,7 +7,7 @@ function exportation() {
 		scene.remove(objects[i].mesh);
 		var current_mesh = exporter.parse(objects[i].mesh);
 		socket.emit('export', {'file' : current_mesh, 'file_name' : i + ".stl"});
-		socket.emit('constraint', {'arrayName' : "Array" + i, 'array' : objects[i].vertexConstraint});
+		socket.emit('constraint', {'associated_file' : i + ".stl", 'vertices' : objects[i].vertexConstraint, 'faces' : objects[i].faceConstraint});
 		socket.emit('conversion', {'name' : i});
 		socket.on('load', function (data) {
 			load_form(data['name']);

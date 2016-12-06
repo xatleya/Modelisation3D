@@ -4,6 +4,7 @@ var myMesh = {
 		this.edges = this.create_edges();
 		this.meshing = null;
 		this.vertexConstraint = [];
+		this.faceConstraint = [];
 	},
 	
 	create_edges: function(){
@@ -24,6 +25,27 @@ var myVertex = {
 		this.coordx = object.mesh.geometry.vertices[index].x;
 		this.coordy = object.mesh.geometry.vertices[index].y;
 		this.coordz = object.mesh.geometry.vertices[index].z;
+		this.xshift = null;
+		this.yshift = null;
+		this.zshift = null;
+	}
+};
+
+var myFace = {
+	init: function (index,object){
+		this.index = index;
+		this.index_a = object.mesh.geometry.faces[index].a
+		this.index_b = object.mesh.geometry.faces[index].b
+		this.index_c = object.mesh.geometry.faces[index].c
+		this.coordx_a = object.mesh.geometry.vertices[this.index_a].x;
+		this.coordy_a = object.mesh.geometry.vertices[this.index_a].y;
+		this.coordz_a = object.mesh.geometry.vertices[this.index_a].z;
+		this.coordx_b = object.mesh.geometry.vertices[this.index_b].x;
+		this.coordy_b = object.mesh.geometry.vertices[this.index_b].y;
+		this.coordz_b = object.mesh.geometry.vertices[this.index_b].z;
+		this.coordx_c = object.mesh.geometry.vertices[this.index_c].x;
+		this.coordy_c = object.mesh.geometry.vertices[this.index_c].y;
+		this.coordz_c = object.mesh.geometry.vertices[this.index_c].z;
 		this.xshift = null;
 		this.yshift = null;
 		this.zshift = null;
