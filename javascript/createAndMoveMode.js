@@ -30,6 +30,7 @@ function create_movement_menu(){
 	var menu = new movements_menu();
 	crcube = gui.add(menu,'cube');
 	crcyl = gui.add(menu,'cylinder');
+	crcone = gui.add(menu, 'cone');
 	delmesh = gui.add(menu, 'delete');
 	changeX = gui.add(menu, 'posX', -500, 500);
 	changeY = gui.add(menu, 'posY', -500, 500);
@@ -49,6 +50,7 @@ function create_movement_menu(){
 function delete_movement_menu(){
 	gui.remove(crcube);
 	gui.remove(crcyl);
+	gui.remove(crcone);
 	gui.remove(delmesh);
 	gui.remove(changeX);
 	gui.remove(changeY);
@@ -112,14 +114,13 @@ function move_edges(){
 
 //cree un cube
 function create_cube(){
-	var cube = new THREE.BoxGeometry(100, 100, 100);
+	var cube = new THREE.BoxGeometry(200, 200, 200);
 	init_cube_color(cube);
 	var boxMaterials = new THREE.MeshBasicMaterial({ vertexColors:THREE.VertexColors });
 	var mesh = new THREE.Mesh(cube, boxMaterials);
 	scene.add(mesh);
 	var m = Object.create(myMesh);
 	m.init(mesh);
-	m.create_edges();
 	objects.push(m);
 	selectedMesh = m;
 	attach_translation_to_mesh(m.mesh);
@@ -138,7 +139,19 @@ function create_cylinder(){
 	scene.add(mesh);
 	var m = Object.create(myMesh);
 	m.init(mesh);
-	m.create_edges();
+	objects.push(m);
+	selectedMesh = m;
+	attach_translation_to_mesh(m.mesh);
+}
+
+//cree un cone
+function create_cone(){
+	var cone = new THREE.ConeGeometry( 105, 120, 8 );
+	var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+	var mesh = new THREE.Mesh(cone, material);
+	scene.add(mesh);
+	var m = Object.create(myMesh);
+	m.init(mesh);
 	objects.push(m);
 	selectedMesh = m;
 	attach_translation_to_mesh(m.mesh);
@@ -203,6 +216,9 @@ var movements_menu = function(){
 	};
 	this.cylinder = function (){
 		create_cylinder();
+	};
+	this.cone = function (){
+		create_cone();
 	};
 	this.delete = function (){
 		delete_mesh();

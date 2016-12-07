@@ -227,7 +227,7 @@ def faces_define(all_edges, vector, edges):
                     break
 
                 elif l1.p1 == l2.p2 and menos_bool == 1:
-                    face.lines.append(l2.number)
+                    face.lines.append(-l2.number)
                     face_line_number_tab.remove(l1.number)
                     l1 = l2
                     swap(face_line_number_tab, 0, k - 1)
@@ -263,23 +263,14 @@ def swap(tab, i1, i2):
 
 def same_vector_count(vector):
     counter = 1
-    i = 0
     result = []
-    while True:
-        v = vector[i]
-        for j in range(i+1, len(vector)):
-            if vector[j] == v:
-                counter += 1
-            else:
-                result.append(counter)
-                counter = 1
-                i = j
-                break
-        if i == len(vector)-2:
-            if vector[i] == vector[i+1]:
-                counter += 1
+    for i in range (1, len(vector)):
+        if vector[i] == vector[i-1]:
+            counter += 1
+        else:
             result.append(counter)
-            break
+            counter = 1
+    result.append(counter)
     return result
 
 
