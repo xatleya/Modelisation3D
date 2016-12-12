@@ -16,6 +16,7 @@ function on_mouse_down_size(){
 }
 
 //creation du menu specifique au mode taille
+//cree quatre champs permettant de modifier la taille selon les trois axes et tous les axes en meme temps
 function create_size_menu(){
 	var menu = new size_menu();
 	Size = gui.add(menu, 'size');
@@ -44,7 +45,7 @@ function delete_size_menu(){
 	gui.remove(Zsize);
 }
 
-//variable utilisee pour la creation du menu specifique au mode taille
+//classe utilisee pour le menu specifique au mode taille
 var size_menu = function() {
 	this.size = 0;
 	this.x_size = 0;
@@ -52,6 +53,8 @@ var size_menu = function() {
 	this.z_size = 0;
 };
 
+//augmente la taille de la formeselectionnee selon l'axe x en fonction de la valeur "value"
+//"value" peut etre negatif
 function increase_x_shape(value){
 	if (selectedMesh != null){
 		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
@@ -67,6 +70,8 @@ function increase_x_shape(value){
 	}
 }
 
+//augmente la taille de la formeselectionnee selon l'axe y en fonction de la valeur "value"
+//"value" peut etre negatif
 function increase_y_shape(value){
 	if (selectedMesh != null){
 		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
@@ -82,6 +87,8 @@ function increase_y_shape(value){
 	}
 }
 
+//augmente la taille de la formeselectionnee selon l'axe z en fonction de la valeur "value"
+//"value" peut etre negatif
 function increase_z_shape(value){
 	if (selectedMesh != null){
 		for (var j = selectedMesh.mesh.geometry.vertices.length - 1; j >= 0; j--){
@@ -97,6 +104,8 @@ function increase_z_shape(value){
 	}
 }
 
+//augmente la taille de la formeselectionnee selon les trois axes en fonction de la valeur "value"
+//"value" peut etre negatif
 function increase_shape(value){
 	if (selectShape != -1){
 		increase_x_shape(value);
@@ -105,6 +114,7 @@ function increase_shape(value){
 	}
 }
 
+//remplace les arretes de l'objet MyMesh selectionne afin que les arretes affichees soient de la meme taille que la forme
 function replace_edges(){
 	var geometry = new THREE.EdgesGeometry( selectedMesh.mesh.geometry );
 	var material = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 4 } );

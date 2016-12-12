@@ -1,6 +1,6 @@
-var gui = new dat.GUI(); 		//variable menu
+var gui = new dat.GUI(); 		//variable globale permettant de modifier le menu
 
-//variable utilisee pour la creation du menu principal
+//classe main_menu utilisee pour la creation du menu principal present dans tous les modes
 //association des 3 boutons de position de camera aux fonctions associees
 var main_menu = function() {
 	this.front_view = function(){

@@ -6,10 +6,10 @@ var changeX;
 var changeY;
 var changeZ;
 
-var edgesTab = [];
-var exporter = new THREE.STLExporter();
+var exporter = new THREE.STLExporter();		// variable utilisee pour creer un .stl
 
-//initialisation du mode mouvement
+//initialisation du mode mouvement : affichage de fleches permettant de dplacer l'objet selectionne
+//creation du menu specifique au mode
 function start_movement_mode(){
 	if(selectedMesh != null){
 		attach_translation_to_mesh(selectedMesh.mesh);
@@ -18,14 +18,17 @@ function start_movement_mode(){
 	create_movement_menu();
 }
 
-//fonction executee en quittant le mode mouvement
+//fonction executee en quittant le mode mouvement : supression des fleches
+//suppression du menu specifique au mode
 function stop_movement_mode(){
 	document.removeEventListener('mousedown', on_mouse_down_move, false);
 	objectControl.detach(selectedMesh.mesh);
 	delete_movement_menu();
 }
 
-//creation du menu specifique au mode mouvement
+//creation du menu specifique au mode mouvement 
+//boutons de creation de cubes et cylindres 
+//sliders permettants de deplacer la forme selectionnee selon les 3 axes
 function create_movement_menu(){
 	var menu = new movements_menu();
 	crcube = gui.add(menu,'cube');
@@ -56,6 +59,7 @@ function delete_movement_menu(){
 }
 
 //fonction executee au clic de souris dans le mode mouvement
+//selection d'un objet, affichages des fleches de deplacement sur cet objet
 function on_mouse_down_move( event ) {
 	mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
@@ -101,6 +105,7 @@ function arrowChange(){
 }
 
 
+//Deplace les arretes blanches d'un objet sur la position de cet objet
 function move_edges(){
 	if(selectedMesh.edges != null){
 		selectedMesh.edges.position.setX(selectedMesh.mesh.position.x);
@@ -110,7 +115,7 @@ function move_edges(){
 }
 
 
-//cree un cube
+//cree un cube de la classe MyMesh avec des arretes blanches permettants une meilleure visualisation
 function create_cube(){
 	var cube = new THREE.BoxGeometry(100, 100, 100);
 	init_cube_color(cube);
@@ -125,7 +130,7 @@ function create_cube(){
 	attach_translation_to_mesh(m.mesh);
 }
 
-//cree un cylindre
+//cree un cylindre de la classe MyMesh avec des arretes blanches permettants une meilleure visualisation
 function create_cylinder(){
 	var cylinder = new THREE.CylinderGeometry(30, 30, 100, 32);
 	var boxMaterials = [
@@ -144,7 +149,7 @@ function create_cylinder(){
 	attach_translation_to_mesh(m.mesh);
 }
 
-//supprime un objet
+//supprime l'objet selectionne
 function delete_mesh(){
 	if (selectedMesh != null){
 		objectControl.detach(selectedMesh.mesh);

@@ -1,7 +1,7 @@
 var vertexSpheres = [];			//tableau contenant une sphere par sommet d'objet
 var selectVertex = [];			//indices des spheres selectionnees dans le tableau "vertexSpheres"
 var selectFaces = []; 			//faces selectionnes
-var changeVertexColor;			//variable utilisee pour le menu du mode contrainte
+var changeVertexColor;			//variables utilisees pour le menu du mode contrainte
 var xshift;
 var yshift;
 var zshift;
@@ -31,6 +31,7 @@ function start_vertex_mode(){
 }
 
 //fonction executee en quittant le mode contrainte
+// suppression des spheres et du menu associe
 function stop_vertex_mode(){
 	document.removeEventListener('mousedown', on_mouse_down_vertex, false);
 	delete_vertex_menu();
@@ -42,6 +43,8 @@ function stop_vertex_mode(){
 }
 
 //creation du menu specifique au mode contrainte
+//un bouton permet de changer la couleur des sommets selectionnes
+//3 champs permettent d'attribuer une contrainte de deplacement selon 3 axes aux elements selectionnes
 function create_vertex_menu(){
 	var menu = new vertex_menu();
 	changeVertexColor = gui.addColor(menu, 'color');
@@ -70,6 +73,7 @@ function delete_vertex_menu(){
 	gui.remove(zshift);
 }
 
+//creation d'une sphere a la position passee en argument
 function create_sphere_vertex(position){
 	var sphere = new THREE.SphereGeometry(5);
 	var material = new THREE.MeshBasicMaterial( {color: 0x000000} );
@@ -82,6 +86,8 @@ function create_sphere_vertex(position){
 }
 
 //fonction executee au clic de souris dans le mode contrainte
+//selection de l'element sur lequel on clique face ou sphere correspondant a un sommet
+//si la touche ctrl est maintenue au moment du clique les selections precedentes ne sont pas supprimees
 function on_mouse_down_vertex( event ) {
 	mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
@@ -207,6 +213,7 @@ function color_vertex(c){
 	//console.log(objects);
 }
 
+//renvoie un tableau contenant les sommets correspondants aux spheres selectionnes
 function get_selected_vertices(){
 	tab = [];
 	for (var k = selectVertex.length - 1; k >= 0; k--) {
@@ -237,6 +244,7 @@ function get_selected_vertices(){
 	return tab;
 }
 
+//retourne l'indice dans le tableau "objects" de l'objet MyMesh contenant le mesh passé en paramètre
 function get_myMesh(geometry){
 	i = 0;
 	while (i < objects.length && objects[i].mesh.geometry != geometry){
@@ -249,6 +257,7 @@ function get_myMesh(geometry){
 	}
 }
 
+//ajoute une contrainte de mouvement selon l'axe x aux elements selectionnes
 function add_x_shift(value){
 	verticesTab = get_selected_vertices();
 	for (var j = verticesTab.length - 1; j >= 0; j--) {
@@ -275,6 +284,7 @@ function add_x_shift(value){
 	}
 }
 
+//ajoute une contrainte de mouvement selon l'axe y aux elements selectionnes
 function add_y_shift(value){
 	verticesTab = get_selected_vertices();
 	for (var j = verticesTab.length - 1; j >= 0; j--) {
@@ -301,6 +311,7 @@ function add_y_shift(value){
 	}
 }
 
+//ajoute une contrainte de mouvement selon l'axe z aux elements selectionnes
 function add_z_shift(value){
 	verticesTab = get_selected_vertices();
 	for (var j = verticesTab.length - 1; j >= 0; j--) {
@@ -326,6 +337,7 @@ function add_z_shift(value){
 		}
 	}
 }
+
 //variable utilisee pour la creation du menu specifique au mode contrainte
 var vertex_menu = function() {
 	this.color = "#000000";
