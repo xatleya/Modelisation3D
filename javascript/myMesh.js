@@ -1,4 +1,6 @@
+//classe permettant d'associer a un mesh : des aretes permettant une meilleure visualisation, un maillage et des contraintes
 var myMesh = {
+	//initialisation
 	init: function (mesh){
 		this.mesh = mesh;
 		this.edges = this.create_edges();
@@ -7,6 +9,7 @@ var myMesh = {
 		this.faceConstraint = [];
 	},
 	
+	//creation d'arretes blanches permettants une meilleure visualisation du mesh
 	create_edges: function(){
 		this.mesh.material.polygonOffset = true;
 		this.mesh.material.polygonOffsetFactor = 1;
@@ -19,7 +22,9 @@ var myMesh = {
 	}
 };
 
+//classe paermettant d'associer a un sommet son indice, sa position et les contraintes appliquees
 var myVertex = {
+	//initialisation
 	init: function (index,object){
 		this.index = index;
 		this.coordx = object.mesh.geometry.vertices[index].x;
@@ -31,7 +36,10 @@ var myVertex = {
 	}
 };
 
+//classe paermettant d'associer a une face son indice, les indices de ses trois sommets
+//la position de ses trois sommets et les contraintes appliquees
 var myFace = {
+	//initialisation
 	init: function (index,object){
 		this.index = index;
 		this.index_a = object.mesh.geometry.faces[index].a

@@ -1,5 +1,6 @@
 var tab = [];
 
+//envoie au serveur les fichiers .stl et les contraintes de chaque forme modelisee dans l'application
 function exportation() {
 	//stop_previous_mode();
 	var socket = io.connect('http://localhost:8087');
@@ -15,6 +16,8 @@ function exportation() {
 	}
 }
 
+//associe a chaque objet MyMesh le maillage recu depuis le serveur
+//affiche le maillage et supprime la forme originale de l'affichage ainsi que les arretes associees
 function load_form(name){
 	var loader = new THREE.STLLoader();
 	loader.load( name + '.stl', function ( geometry ) {
@@ -28,10 +31,13 @@ function load_form(name){
 	});
 }
 
+//appel la fonction exportation
+//est appelee au lancement du mode meshing : touche e
 function start_meshing_mode(){
 	exportation();
 }
 
+//pour chaque objet supprime le maillage de l'affichage et affiche la forme originale ainsi que les arretes associees
 function stop_meshing_mode(){
 	for(var i=0; i<objects.length; i++){
 		scene.remove(objects[i].meshing)

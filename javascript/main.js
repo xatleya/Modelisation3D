@@ -1,18 +1,16 @@
-var renderer, camera, scene;	//variable necessaires au rendu 3D
-var objects = []; 				//liste d'objets créés
-var selectedMesh = null;				//objet selectionne
+var renderer, camera, scene;	//variables necessaires au rendu 3D
+var objects = []; 				//liste d'objets MyMesh créés
+var selectedMesh = null;		//objet MyMesh selectionne
 var controls;
 var raycaster, mouse;			//variable permettant le controle a la souris (deplacement,selection)
 var objectControl;
-var counter = 0;
-var stats;
 var mode = 77;					//numero du mode dans lequel on se trouve
 								//correspond au code de la touche declenchant le mode
 
 init();
 render();
 
-//initialisation de la page
+//initialisation de la page, creation du rendu et des menus
 function init(){
 	renderer = new THREE.WebGLRenderer( { alpha: true } );
 	renderer.setClearColor( 0x000000, 0 );
@@ -53,7 +51,7 @@ function render(){
     renderer.render(scene, camera);
 }
 
-//changement de mode a l'appui d'une touche correspondant a un mode
+//changement de mode a l'appui d'une touche en fonction du code de la touche
 function mode_selection( event ) {
 	switch ( event.keyCode ) {
 		case 77: // m
@@ -86,7 +84,7 @@ function mode_selection( event ) {
 	}
 }
 
-//quitte le mode en cours
+//appel la fonction permettant de quitter le mode actuel
 function stop_previous_mode(){
 		switch (mode){
 		case 77:
