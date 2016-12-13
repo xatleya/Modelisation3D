@@ -119,7 +119,7 @@ function move_edges(){
 
 //cree un cube de la classe MyMesh avec des arretes blanches permettants une meilleure visualisation
 function create_cube(){
-	var cube = new THREE.BoxGeometry(200, 200, 200);
+	var cube = new THREE.BoxGeometry(100, 100, 100);
 	init_cube_color(cube);
 	var boxMaterials = new THREE.MeshBasicMaterial({ vertexColors:THREE.VertexColors });
 	var mesh = new THREE.Mesh(cube, boxMaterials);
@@ -135,9 +135,9 @@ function create_cube(){
 function create_cylinder(){
 	var cylinder = new THREE.CylinderGeometry(30, 30, 100, 32);
 	var boxMaterials = [
-		new THREE.MeshBasicMaterial({color:0xFF0000}),
-		new THREE.MeshBasicMaterial({color:0x0000FF}),
-		new THREE.MeshBasicMaterial({color:0x00FF00})
+		new THREE.MeshBasicMaterial({color:0x3e3e3e}),
+		new THREE.MeshBasicMaterial({color:0x3e3e3e}),
+		new THREE.MeshBasicMaterial({color:0x3e3e3e})
 	];
 	var material = new THREE.MeshFaceMaterial(boxMaterials);
 	var mesh = new THREE.Mesh(cylinder, material);
@@ -151,8 +151,8 @@ function create_cylinder(){
 
 //cree un cone
 function create_cone(){
-	var cone = new THREE.ConeGeometry( 105, 120, 8 );
-	var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+	var cone = new THREE.ConeGeometry( 105, 120, 20 );
+	var material = new THREE.MeshBasicMaterial( {color: 0x3e3e3e} );
 	var mesh = new THREE.Mesh(cone, material);
 	scene.add(mesh);
 	var m = Object.create(myMesh);
